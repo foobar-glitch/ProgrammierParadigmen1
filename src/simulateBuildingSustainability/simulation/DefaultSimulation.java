@@ -5,11 +5,11 @@ import simulateBuildingSustainability.simulation.simulationSubject.SimulationSub
 import simulateBuildingSustainability.simulation.simulationSubject.costs.DefaultMeasurements;
 import simulateBuildingSustainability.simulation.simulationSubject.costs.Measurements;
 
-public abstract class DefaultSimulation extends AbstractSimulation {
+public abstract class DefaultSimulation<T extends SimulationSubject> extends AbstractSimulation<T> {
 
     Measurements<Double> measurements;
 
-    protected DefaultSimulation(SimulationSubject subject) {
+    protected DefaultSimulation(T subject) {
         super(subject);
         this.measurements = new DefaultMeasurements();
     }

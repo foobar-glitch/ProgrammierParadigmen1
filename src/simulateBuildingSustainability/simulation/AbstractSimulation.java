@@ -2,14 +2,14 @@ package simulateBuildingSustainability.simulation;
 
 import simulateBuildingSustainability.simulation.simulationSubject.SimulationSubject;
 
-abstract class AbstractSimulation {
-    private final SimulationSubject subject;
+abstract class AbstractSimulation<T extends SimulationSubject> {
+    private final T subject;
 
-    AbstractSimulation(SimulationSubject subject) {
+    AbstractSimulation(T subject) {
         this.subject = subject;
     }
 
     abstract protected SimulationResult runSimulation();
 
-    protected SimulationSubject getSubject() {return subject;}
+    protected T getSubject() {return subject;}
 }
