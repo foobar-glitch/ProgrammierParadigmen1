@@ -3,9 +3,8 @@ package simulation.simulationSubject.costs;
 import java.util.HashMap;
 import java. util. Set;
 
-// koennte einfach stattdessen von HashMap erben?
-public class DefaultCosts implements Costs {
-    private HashMap<String, Double> costs;
+public class DefaultCosts implements Costs<Double> {
+    private final HashMap<String, Double> costs;
 
     DefaultCosts(HashMap<String, Double> costs) {
         this.costs = costs;
@@ -15,11 +14,11 @@ public class DefaultCosts implements Costs {
         this.costs = new HashMap<String, Double>();
     }
 
-    public void addCost(String key, double cost) {
+    public void addCost(String key, Double cost) {
         costs.put(key, cost);
     }
 
-    public double getCost(String key) {
+    public Double getCost(String key) {
         return costs.get(key);
     }
 
@@ -27,14 +26,12 @@ public class DefaultCosts implements Costs {
         return costs;
     }
 
-    @Override
-    public void addCosts(Costs otherCosts) {
+    public void addCosts(Costs<Double> otherCosts) {
         // TODO check for not the same keys
         costs.forEach((k, v) -> otherCosts.getCosts().merge(k, v, Double::sum));
     }
 
-    @Override
-    public void subtractCosts(Costs otherCosts) {
+    public void subtractCosts(Costs<Double> otherCosts) {
         // TODO check for not the same keys
         costs.forEach((k, v) -> otherCosts.getCosts().merge(k, -v, Double::sum));
     }
