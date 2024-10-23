@@ -32,13 +32,17 @@ public class DefaultCosts implements Costs<Double> {
     @Override
     public void addCosts(Costs<Double> otherCosts) {
         // TODO check for not the same keys
-        costs.forEach((k, v) -> otherCosts.getCosts().merge(k, v, Double::sum));
+        if (!otherCosts.getKeySet().isEmpty()) {
+            costs.forEach((k, v) -> otherCosts.getCosts().merge(k, v, Double::sum));
+        }
     }
 
     @Override
     public void subtractCosts(Costs<Double> otherCosts) {
         // TODO check for not the same keys
-        costs.forEach((k, v) -> otherCosts.getCosts().merge(k, -v, Double::sum));
+        if (!otherCosts.getKeySet().isEmpty()) {
+            costs.forEach((k, v) -> otherCosts.getCosts().merge(k, -v, Double::sum));
+        }
     }
 
     @Override
