@@ -1,4 +1,4 @@
-package simulation.simulationSubject.costs;
+package simulateBuildingSustainability.simulation.simulationSubject.costs;
 
 import java.util.HashMap;
 import java.util.Set;

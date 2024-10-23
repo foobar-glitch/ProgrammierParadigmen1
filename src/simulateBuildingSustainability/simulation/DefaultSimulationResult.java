@@ -1,6 +1,6 @@
-package simulation;
+package simulateBuildingSustainability.simulation;
 
-import simulation.simulationSubject.costs.Measurements;
+import simulateBuildingSustainability.simulation.simulationSubject.costs.Measurements;
 
 public class DefaultSimulationResult implements SimulationResult{
     DefaultSimulationResult(Measurements<Double> measurements){

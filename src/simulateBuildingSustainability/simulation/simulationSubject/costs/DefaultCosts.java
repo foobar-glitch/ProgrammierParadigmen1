@@ -1,4 +1,4 @@
-package simulation.simulationSubject.costs;
+package simulateBuildingSustainability.simulation.simulationSubject.costs;
 
 import java.util.HashMap;
 import java. util. Set;
@@ -10,7 +10,7 @@ public class DefaultCosts implements Costs<Double> {
         this.costs = costs;
     }
 
-    DefaultCosts() {
+    public DefaultCosts() {
         this.costs = new HashMap<String, Double>();
     }
 
