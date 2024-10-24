@@ -32,6 +32,7 @@ public class DefaultCosts implements Costs<Double> {
     @Override
     public void addCosts(Costs<Double> otherCosts) {
         // TODO check for not the same keys
+        // TODO this DefaultCosts is empty?
         if (!otherCosts.getKeySet().isEmpty()) {
             costs.forEach((k, v) -> otherCosts.getCosts().merge(k, v, Double::sum));
         }
@@ -40,6 +41,7 @@ public class DefaultCosts implements Costs<Double> {
     @Override
     public void subtractCosts(Costs<Double> otherCosts) {
         // TODO check for not the same keys
+        // TODO this DefaultCosts is empty?
         if (!otherCosts.getKeySet().isEmpty()) {
             costs.forEach((k, v) -> otherCosts.getCosts().merge(k, -v, Double::sum));
         }

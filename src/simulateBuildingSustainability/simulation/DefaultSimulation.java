@@ -1,41 +1,33 @@
 package simulateBuildingSustainability.simulation;
 
-import simulateBuildingSustainability.simulation.simulationSubject.costs.Costs;
 import simulateBuildingSustainability.simulation.simulationSubject.SimulationSubject;
+import simulateBuildingSustainability.simulation.simulationSubject.costs.DefaultCosts;
 import simulateBuildingSustainability.simulation.simulationSubject.costs.DefaultMeasurements;
 import simulateBuildingSustainability.simulation.simulationSubject.costs.Measurements;
 
-public abstract class DefaultSimulation<T extends SimulationSubject> extends AbstractSimulation<T> {
+public abstract class DefaultSimulation extends AbstractSimulation<SimulationSubject> {
 
-    Measurements<Double> measurements;
+    Measurements<Double, DefaultCosts> measurements;
 
-    protected DefaultSimulation(T subject) {
+    protected DefaultSimulation(SimulationSubject<Double, DefaultCosts> subject) {
         super(subject);
         this.measurements = new DefaultMeasurements();
     }
 
-    protected abstract boolean continueSimulation();
-    protected abstract boolean exitSimulationEarly();
-
-    protected abstract Costs<Double> initialCosts();
-    protected abstract Costs<Double> closingCosts();
-    protected abstract Costs<Double> executeRandomEvents();
-    protected abstract  Costs<Double> incrementSimulation();
-
     @Override
     public SimulationResult runSimulation() {
-        measurements.addInitialCosts(initialCosts());
-        while(continueSimulation()) {
-            measurements.resetTempTracker();
-            measurements.addToTempTracker(executeRandomEvents());
-            if (exitSimulationEarly()) {
+        measurements.addToTempTracker(getSubject().executeInitialEvents());
+        while(getSubject().continueSimulation()) {
+            measurements.addToTempTracker(getSubject().executeRandomEvents());
+            if (getSubject().stopSimulationEarly()) {
                 measurements.ReadTempTrackerToData();
                 break;
             }
-            measurements.addToTempTracker(incrementSimulation());
+            measurements.addToTempTracker(getSubject().nextStep());
             measurements.ReadTempTrackerToData();
+            measurements.resetTempTracker();
         };
-        measurements.addClosingCosts(closingCosts());
+        measurements.addClosingCosts(getSubject().executeFinalEvents());
         return new DefaultSimulationResult(measurements);
     }
 }
