@@ -45,16 +45,13 @@ public class Simulation {
                         return new SimulationResult(costsPerYear, happinessPerYear);
                     }
                     costsThisYear = costsThisYear.addCostContainer(building.renovate(1 - catastrophy.getDamage()));
-                    costsPerYear.add(costsThisYear);
                     // There can only be one event when using break
                     // Otherwise 0.1 would always trigger both 0.2 and 0.3
                     break;
                 }
             }
 
-
             costsThisYear = costsThisYear.addCostContainer(building.age());
-
             costsPerYear.add(costsThisYear);
         }
         return new SimulationResult(costsPerYear, happinessPerYear);
