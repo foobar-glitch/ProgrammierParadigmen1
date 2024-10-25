@@ -31,7 +31,6 @@ public class SimulationResult {
 
         averageCostPerDecade = new ArrayList<Double>();
         averageHappinessPerDecade = new ArrayList<Double>();
-        System.out.println(simulationDuration);
         for (int i = 0; i < simulationDuration; i++) {
             averageCostOverLifetime += costsPerYear.get(i).getCost() / simulationDuration;
             averageCo2OverLifetime += costsPerYear.get(i).getCo2() / simulationDuration;
