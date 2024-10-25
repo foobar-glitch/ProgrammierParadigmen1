@@ -7,7 +7,7 @@ import simulateBuildingSustainability.simulation.simulationSubject.costs.Default
 
 // TODO type of simSub???
 // generic in Abstract Sim?
-public class SustainabilitySimulation extends DefaultSimulation<Building> {
+public class SustainabilitySimulation extends DefaultSimulation {
 
 
     public SustainabilitySimulation(Building building) {
@@ -16,7 +16,7 @@ public class SustainabilitySimulation extends DefaultSimulation<Building> {
 
     @Override
     protected boolean continueSimulation() {
-        return getSubject().getReadyToBeDemolished();
+        return ((Building) getSubject()).getReadyToBeDemolished();
     }
 
     @Override
@@ -26,12 +26,12 @@ public class SustainabilitySimulation extends DefaultSimulation<Building> {
 
     @Override
     protected Costs<Double> initialCosts() {
-        return getSubject().build();
+        return ((Building) getSubject()).build();
     }
 
     @Override
     protected Costs<Double> closingCosts() {
-        return getSubject().demolish();
+        return ((Building) getSubject()).demolish();
     }
 
     @Override
@@ -44,11 +44,11 @@ public class SustainabilitySimulation extends DefaultSimulation<Building> {
         double randomVal = Math.random();
         if (randomVal < 0.05) {
             if (randomVal < 0.005) {
-                getSubject().setReadyToBeDemolished(true);
+                ((Building) getSubject()).setReadyToBeDemolished(true);
             }
             amount = randomVal;
         }
-        return getSubject().renovate(amount);
+        return ((Building) getSubject()).renovate(amount);
     }
 
     @Override
