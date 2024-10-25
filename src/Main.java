@@ -2,9 +2,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public Material getBuilding(){
-        return null;
-    }
 
     public static void main(String[] args) {
         Material[] materials = new Material[] {
@@ -47,6 +44,14 @@ public class Main {
                 apartmentsEco,
                 apartmentsHighEnd
         };
+        double eventProbability = 0.05;
+        Catastrophe[] catastrophes = new Catastrophe[]{
+                new Catastrophe("Tornado", 0.3, eventProbability * 0.25),
+                new Catastrophe("Flood", 0.2, eventProbability * 0.15),
+                new Catastrophe("Earthquake", 0.5, eventProbability * 0.10),
+                new Catastrophe("Structural Collapse", 1, eventProbability * 0.05),
+                new Catastrophe("Minor Event", 0.1, eventProbability * 0.45),
+        };
 
         for (int i = 0; i < buildingsTestConfigs.length; i++) {
             System.out.printf("---TEST CASE %d %s---%n", i + 1, namesTestCases[i]);
@@ -55,7 +60,7 @@ public class Main {
             ArrayList<SimulationResult> results = new ArrayList<SimulationResult>();
             for (int j = 0; j < 10; j++) {
                 Simulation simulation = new Simulation(buildingsTestConfigs[i], interiorsTestConfigs[i]);
-                results.add(simulation.runSimulation());
+                results.add(simulation.runSimulation(catastrophes));
                 System.out.printf("Nachhaltigkeits-Score fuer Simulation%d %f%n", j + 1, results.get(j).getSustainabilityScore());
             }
 

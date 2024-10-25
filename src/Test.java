@@ -14,12 +14,20 @@ import java.rmi.UnexpectedException;
 public class Test {
 
     public static void main(String[] args) throws UnexpectedException {
-        Main mainFunction = new Main();
         Material[] materials = new Material[] {
                 new Material("wood", new CostContainer(125.0, 0.4, 0.01)),
                 new Material("concrete", new CostContainer(250.0, 0.8, 0.15)),
                 new Material("steel", new CostContainer(1200.0, 1.4, 0.007))
         };
+        double eventProbability = 0.05;
+        Catastrophe[] catastrophes = new Catastrophe[]{
+                new Catastrophe("Tornado", 0.3, eventProbability * 0.25),
+                new Catastrophe("Flood", 0.2, eventProbability * 0.15),
+                new Catastrophe("Earthquake", 0.5, eventProbability * 0.10),
+                new Catastrophe("Structural Collapse", 1, eventProbability * 0.05),
+                new Catastrophe("Minor Event", 0.1, eventProbability * 0.45),
+        };
+
         int numberOfApartments = 10, lifetimeBuilding = 50, residentsPApartment = 1;
         MaterialBag shellEco = new MaterialBag(materials, new Double[] {257.3, 10.0, 2.45});
         MaterialBag  interiorEco = new MaterialBag(materials, new Double[] {14.4, 2.0, 0.875});
@@ -28,7 +36,7 @@ public class Test {
         BuildingSpecs buildingEco = new BuildingSpecs(lifetimeBuilding, shellEco, apartmentsEco, heatingAndMaintenanceCostsEco,0.7f);
 
         Simulation simulation = new Simulation(buildingEco, apartmentsEco);
-        SimulationResult simResult = simulation.runSimulation();
+        SimulationResult simResult = simulation.runSimulation(catastrophes);
 
 
         /* Calculate Lower and Upper Bounds for the costs of a building in simulation */
