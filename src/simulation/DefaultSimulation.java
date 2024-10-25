@@ -7,7 +7,7 @@ import simulation.simulationSubject.costs.Measurements;
 
 abstract class DefaultSimulation extends AbstractSimulation {
 
-    Measurements<Double> measurements;
+    Measurements measurements;
 
     DefaultSimulation(SimulationSubject subject) {
         super(subject);
@@ -17,10 +17,10 @@ abstract class DefaultSimulation extends AbstractSimulation {
     abstract boolean continueSimulation();
     abstract boolean exitSimulationEarly();
 
-    abstract Costs<Double> initialCosts();
-    abstract Costs<Double> closingCosts();
-    abstract Costs<Double> executeRandomEvents();
-    abstract  Costs<Double> incrementSimulation();
+    abstract Costs initialCosts();
+    abstract Costs closingCosts();
+    abstract Costs executeRandomEvents();
+    abstract  Costs incrementSimulation();
 
     @Override
     public SimulationResult runSimulation() {
