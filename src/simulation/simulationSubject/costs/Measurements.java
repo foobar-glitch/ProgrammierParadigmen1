@@ -1,4 +1,4 @@
-package simulateBuildingSustainability.simulation.simulationSubject.costs;
+package simulation.simulationSubject.costs;
 
 public interface Measurements<T> {
     void resetTempTracker();

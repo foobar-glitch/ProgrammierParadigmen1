@@ -1,4 +1,4 @@
-package simulateBuildingSustainability.simulation;
+package simulation;
 
 public interface SimulationResult {
     void printResultsFull();

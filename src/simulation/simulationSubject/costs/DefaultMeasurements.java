@@ -1,4 +1,4 @@
-package simulateBuildingSustainability.simulation.simulationSubject.costs;
+package simulation.simulationSubject.costs;
 
 import java.util.ArrayList;
 
