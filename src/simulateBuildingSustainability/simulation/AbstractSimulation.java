@@ -1,6 +1,6 @@
-package simulation;
+package simulateBuildingSustainability.simulation;
 
-import simulation.simulationSubject.SimulationSubject;
+import simulateBuildingSustainability.simulation.simulationSubject.SimulationSubject;
 
 abstract class AbstractSimulation {
     private final SimulationSubject subject;
@@ -9,7 +9,7 @@ abstract class AbstractSimulation {
         this.subject = subject;
     }
 
-    abstract public SimulationResult runSimulation();
+    abstract protected SimulationResult runSimulation();
 
     protected SimulationSubject getSubject() {return subject;}
 }
