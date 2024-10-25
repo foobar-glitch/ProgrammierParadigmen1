@@ -14,34 +14,28 @@ public class DefaultCosts implements Costs<Double> {
         this.costs = new HashMap<String, Double>();
     }
 
-    @Override
     public void addCost(String key, Double cost) {
         costs.put(key, cost);
     }
 
-    @Override
     public Double getCost(String key) {
         return costs.get(key);
     }
 
-    @Override
     public HashMap<String, Double> getCosts() {
         return costs;
     }
 
-    @Override
     public void addCosts(Costs<Double> otherCosts) {
         // TODO check for not the same keys
         costs.forEach((k, v) -> otherCosts.getCosts().merge(k, v, Double::sum));
     }
 
-    @Override
     public void subtractCosts(Costs<Double> otherCosts) {
         // TODO check for not the same keys
         costs.forEach((k, v) -> otherCosts.getCosts().merge(k, -v, Double::sum));
     }
 
-    @Override
     public Set<String> getKeySet() {
         return costs.keySet();
     }
