@@ -3,7 +3,7 @@ package simulation;
 import simulation.simulationSubject.costs.Measurements;
 
 public class DefaultSimulationResult implements SimulationResult{
-    DefaultSimulationResult(Measurements measurements){
+    DefaultSimulationResult(Measurements<Double> measurements){
 
     }
 

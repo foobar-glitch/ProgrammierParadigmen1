@@ -1,8 +1,8 @@
 package simulation.simulationSubject.costs;
 
-public class DefaultMeasurements implements Measurements{
+public class DefaultMeasurements implements Measurements<Double>{
 
-    private Costs tracker;
+    private Costs<Double> tracker;
 
     @Override
     public void resetTempTracker() {
@@ -15,17 +15,17 @@ public class DefaultMeasurements implements Measurements{
     }
 
     @Override
-    public void addInitialCosts(Costs costs) {
+    public void addInitialCosts(Costs<Double> costs) {
 
     }
 
     @Override
-    public void addClosingCosts(Costs costs) {
+    public void addClosingCosts(Costs<Double> costs) {
 
     }
 
     @Override
-    public void addToTempTracker(Costs costs) {
+    public void addToTempTracker(Costs<Double> costs) {
 
     }
 }
