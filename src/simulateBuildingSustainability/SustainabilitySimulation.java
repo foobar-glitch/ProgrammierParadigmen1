@@ -1,8 +1,8 @@
 package simulateBuildingSustainability;
 
 import simulateBuildingSustainability.simulation.DefaultSimulation;
+import simulateBuildingSustainability.simulation.simulationSubject.SimulationSubject;
 import simulateBuildingSustainability.simulation.simulationSubject.costs.Costs;
-import simulateBuildingSustainability.simulation.simulationSubject.costs.DefaultCosts;
 
 
 // TODO type of simSub???
@@ -16,12 +16,12 @@ public class SustainabilitySimulation extends DefaultSimulation {
 
     @Override
     protected boolean continueSimulation() {
-        return ((Building) getSubject()).getReadyToBeDemolished();
+        return false;
     }
 
     @Override
     protected boolean exitSimulationEarly() {
-        return !continueSimulation();
+        return ((Building) getSubject()).wasDemolished();
     }
 
     @Override
@@ -36,27 +36,11 @@ public class SustainabilitySimulation extends DefaultSimulation {
 
     @Override
     protected Costs<Double> executeRandomEvents() {
-        // TODO placeholder from old code
-        // would be prettier if Costs would not be used
-        // always call renovate but sometimes with 0?
-        // TODO rename?
-        double amount = 0;
-        double randomVal = Math.random();
-        if (randomVal < 0.05) {
-            if (randomVal < 0.005) {
-                ((Building) getSubject()).setReadyToBeDemolished(true);
-            }
-            amount = randomVal;
-        }
-        return ((Building) getSubject()).renovate(amount);
+        return null;
     }
 
     @Override
     protected Costs<Double> incrementSimulation() {
-        // TODO logic for how long the simulation should run, here
-        // only access state of building
-        // set building ready to demolish here
-
         return null;
     }
 }
