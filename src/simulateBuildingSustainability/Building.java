@@ -22,7 +22,6 @@ public class Building implements simulateBuildingSustainability.simulation.simul
     public Costs demolish(){return new DefaultCosts();}
     public Boolean getReadyToBeDemolished(){return readyToBeDemolished;};
     public void setReadyToBeDemolished(Boolean ReadyToBeDemolished){this.readyToBeDemolished = ReadyToBeDemolished;};
-
     public Apartment[] getApartments() {
         return apartments;
     }

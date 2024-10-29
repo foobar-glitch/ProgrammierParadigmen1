@@ -15,7 +15,7 @@ public class DefaultCosts implements Costs {
     }
 
     @Override
-    public void addCost(String key, Double cost) {
+    public void insertCost(String key, Double cost) {
         costs.put(key, cost);
     }
 
