@@ -2,13 +2,13 @@ package simulateBuildingSustainability.simulation.simulationSubject.costs;
 
 import java.util.ArrayList;
 
-public class DefaultMeasurements implements Measurements<Double>{
+public class DefaultMeasurements implements Measurements{
 
-    ArrayList<Costs<Double>> measurements;
-    private Costs<Double> tracker;
+    ArrayList<Costs> measurements;
+    private Costs tracker;
 
     public DefaultMeasurements() {
-        measurements = new ArrayList<Costs<Double>>();
+        measurements = new ArrayList<Costs>();
         tracker = new DefaultCosts();
     }
 
@@ -23,7 +23,7 @@ public class DefaultMeasurements implements Measurements<Double>{
     }
 
     @Override
-    public void addInitialCosts(Costs<Double> costs) {
+    public void addInitialCosts(Costs costs) {
         if (measurements.isEmpty())
          measurements.add(costs);
         else {
@@ -32,7 +32,7 @@ public class DefaultMeasurements implements Measurements<Double>{
     }
 
     @Override
-    public void addClosingCosts(Costs<Double> costs) {
+    public void addClosingCosts(Costs costs) {
         if (measurements.isEmpty())
             measurements.add(costs);
         else {
@@ -41,7 +41,7 @@ public class DefaultMeasurements implements Measurements<Double>{
     }
 
     @Override
-    public void addToTempTracker(Costs<Double> costs) {
+    public void addToTempTracker(Costs costs) {
         if (tracker.getKeySet().isEmpty()) {
             tracker.getCosts().forEach((k, v) -> costs.getCosts().put(k, v));
         }

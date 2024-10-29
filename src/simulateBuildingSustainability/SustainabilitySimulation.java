@@ -25,17 +25,17 @@ public class SustainabilitySimulation extends DefaultSimulation<Building> {
     }
 
     @Override
-    protected Costs<Double> initialCosts() {
+    protected Costs initialCosts() {
         return getSubject().build();
     }
 
     @Override
-    protected Costs<Double> closingCosts() {
+    protected Costs closingCosts() {
         return getSubject().demolish();
     }
 
     @Override
-    protected Costs<Double> executeRandomEvents() {
+    protected Costs executeRandomEvents() {
         // TODO placeholder from old code
         // would be prettier if Costs would not be used
         // always call renovate but sometimes with 0?
@@ -52,7 +52,7 @@ public class SustainabilitySimulation extends DefaultSimulation<Building> {
     }
 
     @Override
-    protected Costs<Double> incrementSimulation() {
+    protected Costs incrementSimulation() {
         // TODO logic for how long the simulation should run, here
         // only access state of building
         // set building ready to demolish here

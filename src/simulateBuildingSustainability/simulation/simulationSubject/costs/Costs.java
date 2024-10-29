@@ -3,11 +3,11 @@ package simulateBuildingSustainability.simulation.simulationSubject.costs;
 import java.util.HashMap;
 import java.util.Set;
 
-public interface Costs<T> {
-    public void addCost(String key, T cost);
-    T getCost(String key);
-    HashMap<String, T> getCosts();
-    void addCosts(Costs<T> costs);
-    void subtractCosts(Costs<T> costs);
+public interface Costs {
+    public void addCost(String key, Double cost);
+    Double getCost(String key);
+    HashMap<String, Double> getCosts();
+    void addCosts(Costs costs);
+    void subtractCosts(Costs costs);
     public Set<String> getKeySet();
 }

@@ -18,9 +18,9 @@ public class Building implements simulateBuildingSustainability.simulation.simul
         readyToBeDemolished = false;
     }
     public Boolean checkRemainingLifetime(){ return null;}
-    public Costs<Double> build(){return new DefaultCosts();}
-    public Costs<Double> demolish(){return new DefaultCosts();}
-    public  Costs<Double> renovate(double amount){return new DefaultCosts();}
+    public Costs build(){return new DefaultCosts();}
+    public Costs demolish(){return new DefaultCosts();}
+    public  Costs renovate(double amount){return new DefaultCosts();}
     public Boolean getReadyToBeDemolished(){return readyToBeDemolished;};
     public void setReadyToBeDemolished(Boolean ReadyToBeDemolished){this.readyToBeDemolished = ReadyToBeDemolished;};
 

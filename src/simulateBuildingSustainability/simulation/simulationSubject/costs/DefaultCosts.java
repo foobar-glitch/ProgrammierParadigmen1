@@ -3,7 +3,7 @@ package simulateBuildingSustainability.simulation.simulationSubject.costs;
 import java.util.HashMap;
 import java. util. Set;
 
-public class DefaultCosts implements Costs<Double> {
+public class DefaultCosts implements Costs {
     private final HashMap<String, Double> costs;
 
     DefaultCosts(HashMap<String, Double> costs) {
@@ -30,7 +30,7 @@ public class DefaultCosts implements Costs<Double> {
     }
 
     @Override
-    public void addCosts(Costs<Double> otherCosts) {
+    public void addCosts(Costs otherCosts) {
         // TODO check for not the same keys
         if (!otherCosts.getKeySet().isEmpty()) {
             costs.forEach((k, v) -> otherCosts.getCosts().merge(k, v, Double::sum));
@@ -38,7 +38,7 @@ public class DefaultCosts implements Costs<Double> {
     }
 
     @Override
-    public void subtractCosts(Costs<Double> otherCosts) {
+    public void subtractCosts(Costs otherCosts) {
         // TODO check for not the same keys
         if (!otherCosts.getKeySet().isEmpty()) {
             costs.forEach((k, v) -> otherCosts.getCosts().merge(k, -v, Double::sum));

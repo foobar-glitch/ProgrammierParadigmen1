@@ -3,7 +3,7 @@ package simulateBuildingSustainability.simulation;
 import simulateBuildingSustainability.simulation.simulationSubject.costs.Measurements;
 
 public class DefaultSimulationResult implements SimulationResult{
-    DefaultSimulationResult(Measurements<Double> measurements){
+    DefaultSimulationResult(Measurements measurements){
 
     }
 

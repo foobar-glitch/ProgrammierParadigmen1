@@ -1,10 +1,10 @@
 package simulateBuildingSustainability.simulation.simulationSubject.costs;
 
-public interface Measurements<T> {
+public interface Measurements {
     void resetTempTracker();
     void ReadTempTrackerToData();
-    void addInitialCosts(Costs<T> costs);
-    void addClosingCosts(Costs<T> costs);
-    void addToTempTracker(Costs<T> costs);
+    void addInitialCosts(Costs costs);
+    void addClosingCosts(Costs costs);
+    void addToTempTracker(Costs costs);
     // TODO way to access data
 }

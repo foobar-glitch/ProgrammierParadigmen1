@@ -7,7 +7,7 @@ import simulateBuildingSustainability.simulation.simulationSubject.costs.Measure
 
 public abstract class DefaultSimulation<T extends SimulationSubject> extends AbstractSimulation<T> {
 
-    Measurements<Double> measurements;
+    Measurements measurements;
 
     protected DefaultSimulation(T subject) {
         super(subject);
@@ -17,10 +17,10 @@ public abstract class DefaultSimulation<T extends SimulationSubject> extends Abs
     protected abstract boolean continueSimulation();
     protected abstract boolean exitSimulationEarly();
 
-    protected abstract Costs<Double> initialCosts();
-    protected abstract Costs<Double> closingCosts();
-    protected abstract Costs<Double> executeRandomEvents();
-    protected abstract  Costs<Double> incrementSimulation();
+    protected abstract Costs initialCosts();
+    protected abstract Costs closingCosts();
+    protected abstract Costs executeRandomEvents();
+    protected abstract  Costs incrementSimulation();
 
     @Override
     public SimulationResult runSimulation() {
