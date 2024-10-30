@@ -14,7 +14,9 @@ public class Building implements simulateBuildingSustainability.simulation.simul
     private Apartment[] apartments;
     private boolean readyToBeDemolished;
 
-    Building() {
+    // TODO have specs here?
+
+    Building(BuildingSpecs specs) {
         readyToBeDemolished = false;
     }
     public Boolean checkRemainingLifetime(){ return null;}

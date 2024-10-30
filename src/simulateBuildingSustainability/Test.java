@@ -40,9 +40,7 @@ public class Test {
         ApartmentSpecs apartmentsEco = new ApartmentSpecs(interiorEco, residentsPApartment, numberOfApartments, 20,0.9);
         BuildingSpecs buildingEco = new BuildingSpecs(lifetimeBuilding, shellEco, apartmentsEco, heatingAndMaintenanceCostsEco,0.7f);
 
-        // TODO create Apartments specified in "apartmentsEco" in Building
-        DefaultSimulation simulation = new SustainabilitySimulation(buildingEco);
-        // TODO what to d with catastrophes in "catastrophes"?
+        SustainabilitySimulation simulation = new SustainabilitySimulation(new Building(buildingEco), catastrophes);
         DefaultSimulationResult simResult = simulation.runSimulation();
 
 
