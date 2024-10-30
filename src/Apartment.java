@@ -33,6 +33,10 @@ public class Apartment {
         this.satisfactionFactor = maxHappiness;
     }
 
+    public record Record(MaterialBag material, int residentNumber, int numberOfApartments, int lifetimeApartment, double happinessUpperBound){
+
+    }
+
     /**
      * Increments the Age (+1 year)
      * @return FALSE if the Apartment exceeded its lifetime

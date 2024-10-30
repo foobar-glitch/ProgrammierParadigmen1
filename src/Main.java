@@ -16,30 +16,30 @@ public class Main {
         MaterialBag shellMinimal = new MaterialBag(materials, new Double[] {216.0, 30.0, 3.75});
         MaterialBag  interiorMinimal = new MaterialBag(materials, new Double[] {14.4, 2.0, 0.875});
         CostContainer heatingAndMaintenanceCostsMinimal = new CostContainer(0.35, 0.6, 0.05);
-        ApartmentSpecs apartmentsMinimal = new ApartmentSpecs(interiorMinimal, 1, 10, 20 ,0.8);
-        BuildingSpecs buildingMinimal = new BuildingSpecs(50, shellMinimal, apartmentsMinimal, heatingAndMaintenanceCostsMinimal, 0.5f);
+        Apartment.Record apartmentsMinimal = new Apartment.Record(interiorMinimal, 1, 10, 20 ,0.8);
+        Building.Record buildingMinimal = new Building.Record(50, shellMinimal, apartmentsMinimal, heatingAndMaintenanceCostsMinimal, 0.5f);
 
         MaterialBag shellEco = new MaterialBag(materials, new Double[] {257.3, 10.0, 2.45});
         MaterialBag  interiorEco = new MaterialBag(materials, new Double[] {14.4, 2.0, 0.875});
         CostContainer heatingAndMaintenanceCostsEco = new CostContainer(0.35, 0.3, 0.05);
-        ApartmentSpecs apartmentsEco = new ApartmentSpecs(interiorEco, 1, 10, 20,0.9);
-        BuildingSpecs buildingEco = new BuildingSpecs(50, shellEco, apartmentsEco, heatingAndMaintenanceCostsEco,0.7f);
+        Apartment.Record apartmentsEco = new Apartment.Record(interiorEco, 1, 10, 20,0.9);
+        Building.Record buildingEco = new Building.Record(50, shellEco, apartmentsEco, heatingAndMaintenanceCostsEco,0.7f);
 
         MaterialBag shellHighEnd = new MaterialBag(materials, new Double[] {382.3, 48.6, 5.35});
         MaterialBag  interiorHighEnd = new MaterialBag(materials, new Double[] {12.3, 1.9, 1.35});
         CostContainer heatingAndMaintenanceHighEnd = new CostContainer(0.37, 0.32, 0.05);
-        ApartmentSpecs apartmentsHighEnd = new ApartmentSpecs(interiorHighEnd, 1, 10, 25,1.0);
-        BuildingSpecs buildingHighEnd = new BuildingSpecs(100, shellHighEnd, apartmentsHighEnd, heatingAndMaintenanceHighEnd,0.5f);
+        Apartment.Record apartmentsHighEnd = new Apartment.Record(interiorHighEnd, 1, 10, 25,1.0);
+        Building.Record buildingHighEnd = new Building.Record(100, shellHighEnd, apartmentsHighEnd, heatingAndMaintenanceHighEnd,0.5f);
 
         String[] namesTestCases = {
                 "MINIMAL",
                 "OEKOLOGISCH",
                 "HOCHWERTIG"};
-        BuildingSpecs[] buildingsTestConfigs = new BuildingSpecs[] {
+        Building.Record[] buildingsTestConfigs = new Building.Record[] {
                 buildingMinimal,
                 buildingEco,
                 buildingHighEnd};
-        ApartmentSpecs[] interiorsTestConfigs = new ApartmentSpecs[] {
+        Apartment.Record[] interiorsTestConfigs = new Apartment.Record[] {
                 apartmentsMinimal,
                 apartmentsEco,
                 apartmentsHighEnd

@@ -15,7 +15,7 @@ public class Simulation {
     private ArrayList<CostContainer> costsPerYear;
     private ArrayList<Double> happinessPerYear;
 
-    public Simulation(BuildingSpecs buildingSpecs, ApartmentSpecs apartmentSpecs) {
+    public Simulation(Building.Record buildingSpecs, Apartment.Record apartmentSpecs) {
         this.building = new Building(buildingSpecs, apartmentSpecs);
         this.costsPerYear = new ArrayList<CostContainer>();
         this.happinessPerYear = new ArrayList<Double>();

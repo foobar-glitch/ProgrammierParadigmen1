@@ -12,27 +12,29 @@ public class Building {
     private int numberOfResidents = 0;
 
     // TODO explain param
-    public Building(BuildingSpecs buildingSpecs, ApartmentSpecs apartmentSpecs)
+    public Building(Building.Record buildingSpecs, Apartment.Record apartmentSpecs)
     {
-        this.age = buildingSpecs.getAge();
-        this.lifetime = buildingSpecs.getLifetime();
-        this.shellConstruct = buildingSpecs.getShellConstruct();
-        this.heatingAndMaintenanceCosts = buildingSpecs.getHeatingAndMaintenanceCosts();
-        this.recycleRate = buildingSpecs.getRecycleRate();
+        this.age = 0;
+        this.lifetime = buildingSpecs.lifetime();
+        this.shellConstruct = buildingSpecs.shellConstruct();
+        this.heatingAndMaintenanceCosts = buildingSpecs.heatingAndMaintenanceCosts();
+        this.recycleRate = buildingSpecs.recycleRate();
 
-        this.apartments = new Apartment[apartmentSpecs.getNumberOfApartments()];
-        for(int i = 0; i < apartmentSpecs.getNumberOfApartments(); i++){
+        this.apartments = new Apartment[apartmentSpecs.numberOfApartments()];
+        for(int i = 0; i < apartmentSpecs.numberOfApartments(); i++){
             apartments[i] = new Apartment(
-                    apartmentSpecs.getMaterial(),
-                    apartmentSpecs.getLifetimeApartment(),
-                    apartmentSpecs.getResidentNumber(),
-                    apartmentSpecs.getHappinessUpperBound());
+                    apartmentSpecs.material(),
+                    apartmentSpecs.lifetimeApartment(),
+                    apartmentSpecs.residentNumber(),
+                    apartmentSpecs.happinessUpperBound());
         }
 
         for(Apartment apartment: apartments){
             this.numberOfResidents += apartment.getNumberOfResidents();
         }
     }
+
+    public record Record(int lifetime, MaterialBag shellConstruct, Apartment.Record apartmentSpecs, CostContainer heatingAndMaintenanceCosts, double recycleRate){}
 
 
     /**
