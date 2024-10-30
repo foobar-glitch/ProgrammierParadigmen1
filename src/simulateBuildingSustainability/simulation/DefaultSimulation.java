@@ -5,11 +5,11 @@ import simulateBuildingSustainability.simulation.simulationSubject.SimulationSub
 import simulateBuildingSustainability.simulation.simulationSubject.costs.DefaultMeasurements;
 import simulateBuildingSustainability.simulation.simulationSubject.costs.Measurements;
 
-public abstract class DefaultSimulation<T extends SimulationSubject> extends AbstractSimulation<T> {
+public abstract class DefaultSimulation<T1 extends SimulationSubject> extends AbstractSimulation<T1> {
 
     Measurements measurements;
 
-    protected DefaultSimulation(T subject) {
+    protected DefaultSimulation(T1 subject) {
         super(subject);
         this.measurements = new DefaultMeasurements();
     }
@@ -23,7 +23,7 @@ public abstract class DefaultSimulation<T extends SimulationSubject> extends Abs
     protected abstract  Costs incrementSimulation();
 
     @Override
-    public SimulationResult runSimulation() {
+    public DefaultSimulationResult runSimulation() {
         measurements.addInitialCosts(initialCosts());
         while(continueSimulation()) {
             measurements.resetTempTracker();

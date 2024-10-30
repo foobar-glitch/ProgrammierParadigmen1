@@ -4,6 +4,8 @@ import simulateBuildingSustainability.simulation.DefaultSimulation;
 import simulateBuildingSustainability.simulation.simulationSubject.costs.Costs;
 import simulateBuildingSustainability.simulation.simulationSubject.costs.DefaultCosts;
 
+// uses logic in parent class to run simulation
+// this class only implements the specific actions that are done in each corresponding step of the simulation
 public class SustainabilitySimulation extends DefaultSimulation<Building> {
 
 
