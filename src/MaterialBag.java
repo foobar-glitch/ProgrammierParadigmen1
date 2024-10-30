@@ -125,6 +125,48 @@ public class MaterialBag {
         }
         return totalCost;
     }
+    
+    /**
+     * Returns all Materials inside MaterialBag as List
+    */
+    public Material[] materials(){
+        Material[] materials = new Material[materialInventory.size()];
+        int i=0;
+        for(Material material : materialInventory.keySet()){
+            materials[i++] = material;
+        }
+        return materials;
+    }
 
-    public HashMap<Material, Double> getMaterialInventory() { return materialInventory; }
+    /**
+     * Read a MaterialBag from csv File
+     * @param path Path of File
+     */
+    public static MaterialBag readFromFile(String path){
+        MaterialBag materialBag = new MaterialBag();
+
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(path))){
+            for(String line; (line = bufferedReader.readLine()) != null; ) {
+                String[] values = line.split(", ");
+                if(values.length != 5){
+                    throw new UnsupportedEncodingException(path + " in wrong format: " + line);
+                }
+
+                double amount = Double.parseDouble(values[0]);
+                String materialName = values[1];
+                double materialCost = Double.parseDouble(values[2]);
+                double materialCo2 = Double.parseDouble(values[3]);
+                double materialWaste = Double.parseDouble(values[4]);
+
+                CostContainer cost = new CostContainer(materialCost, materialCo2, materialWaste);
+                Material material = new Material(materialName, cost);
+
+                materialBag.setMaterial(material, amount);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("File: " + path + " does not exist");
+        }
+
+        return materialBag;
+    }
 }
