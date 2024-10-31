@@ -37,6 +37,8 @@ public class DefaultCosts implements Costs {
     @Override
     public void addCosts(Costs otherCosts) {
         // TODO check for not the same keys
+
+
         if (!otherCosts.isEmpty()) {
             costs.forEach((k, v) -> otherCosts.getCosts().merge(k, v, Double::sum));
         }
