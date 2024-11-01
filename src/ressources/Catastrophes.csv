@@ -1,0 +1,6 @@
+eventName, damage, probability
+Tornado, 0.3, 0.25
+Flood, 0.2, 0.15
+Earthquake, 0.5, 0.10
+Structural Collapse, 1.0, 0.05
+Minor Event, 0.1, 0.45

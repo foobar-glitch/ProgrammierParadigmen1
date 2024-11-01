@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+
 public class Catastrophe {
     String eventName;
     double damage;
@@ -20,6 +26,33 @@ public class Catastrophe {
         this.eventName = eventName;
         this.damage = damage;
         this.probability = probability;
+    }
+
+    public static Catastrophe[] readCatastrophesFromFile(String path, double eventProbability){
+        ArrayList<Catastrophe> catastrophes = new ArrayList<Catastrophe>();
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(path))){
+            String fieldNames =  bufferedReader.readLine();
+            if (fieldNames != null) {
+                String[] names = fieldNames.split(", ");
+                if(!names[0].equals("eventName") || !names[1].equals("damage") || !names[2].equals("probability")) {
+                    throw new UnsupportedEncodingException(path + " in wrong format");
+                }
+            }
+            for(String line; (line = bufferedReader.readLine()) != null; ) {
+                String[] values = line.split(", ");
+                if(values.length != 3){
+                    throw new UnsupportedEncodingException(path + " in wrong format: " + line);
+                }
+
+                String name = values[0];
+                double damage = Double.parseDouble(values[1]);
+                double probability = Double.parseDouble(values[2]) * eventProbability;
+                catastrophes.add(new Catastrophe(name, damage, probability));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("File: " + path + " does not exist");
+        }
+        return catastrophes.toArray(new Catastrophe[0]);
     }
 
     double getDamage(){

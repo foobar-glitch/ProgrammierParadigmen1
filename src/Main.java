@@ -45,13 +45,7 @@ public class Main {
                 apartmentsHighEnd
         };
         double eventProbability = 0.05;
-        Catastrophe[] catastrophes = new Catastrophe[]{
-                new Catastrophe("Tornado", 0.3, eventProbability * 0.25),
-                new Catastrophe("Flood", 0.2, eventProbability * 0.15),
-                new Catastrophe("Earthquake", 0.5, eventProbability * 0.10),
-                new Catastrophe("Structural Collapse", 1.0, eventProbability * 0.05),
-                new Catastrophe("Minor Event", 0.1, eventProbability * 0.45),
-        };
+        Catastrophe[] catastrophes = Catastrophe.readCatastrophesFromFile("src/ressources/Catastrophes.csv", eventProbability);
 
         for (int i = 0; i < buildingsTestConfigs.length; i++) {
             System.out.printf("---TEST CASE %d %s---%n", i + 1, namesTestCases[i]);
