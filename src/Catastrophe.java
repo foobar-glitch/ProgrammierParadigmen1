@@ -34,7 +34,9 @@ public class Catastrophe {
             String fieldNames =  bufferedReader.readLine();
             if (fieldNames != null) {
                 String[] names = fieldNames.split(", ");
-                if(!names[0].equals("eventName") || !names[1].equals("damage") || !names[2].equals("probability")) {
+                if(!names[0].equals("(String) eventName") ||
+                        !names[1].equals("(double) damage") ||
+                        !names[2].equals("(double) probability")) {
                     throw new UnsupportedEncodingException(path + " in wrong format");
                 }
             }
