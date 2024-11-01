@@ -28,8 +28,11 @@ public class Simulation {
             CostContainer costsThisYear = new CostContainer(0.0f, 0.0f, 0.0f);
             happinessPerYear.add(building.satisfaction());
 
-            double renovations = (double) Math.random();
-            costsThisYear = costsThisYear.addCostContainer(building.renovate(renovations));
+            for (Apartment apartment : building.getApartments()) {
+                if (Math.random() < 1.0/apartment.getLifetime()) {
+                    costsThisYear.addCostContainer(apartment.renovate());
+                }
+            }
 
             double randomVal = Math.random();
             // Sort the array by probability in ascending order
@@ -38,13 +41,19 @@ public class Simulation {
             for(Catastrophe catastrophy: catastrophes){
                 if(randomVal < catastrophy.getProbability()){
                     System.out.printf("Event: %s happened%n", catastrophy.getEventName());
-                    if(catastrophy.getDamage() == 1.0f){
+                    if(catastrophy.getDamage() == 1.0){
                         System.out.println("Critical Event. Demolishing.");
                         costsThisYear = costsThisYear.addCostContainer(building.demolishing());
                         costsPerYear.add(costsThisYear);
                         return new SimulationResult(costsPerYear, happinessPerYear);
                     }
-                    costsThisYear = costsThisYear.addCostContainer(building.renovate(1 - catastrophy.getDamage()));
+
+                    for (Apartment apartment : building.getApartments()) {
+                        if (Math.random() < catastrophy.getDamage()) {
+                            costsThisYear.addCostContainer(apartment.renovate());
+                        }
+                    }
+
                     // There can only be one event when using break
                     // Otherwise 0.1 would always trigger both 0.2 and 0.3
                     break;

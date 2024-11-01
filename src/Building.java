@@ -1,14 +1,12 @@
 public class Building {
-    private int lifetime;
+    private final int lifetime;
     private int age;
     /* The materials of the shell of the building */
-    private MaterialBag shellConstruct;
+    private final MaterialBag shellConstruct;
     /* The materials of the building part that has to be renovated*/
-    private Apartment[] apartments;
-    /* The total costs of the initial building */
-    private int renovationIndex;
+    private final Apartment[] apartments;
     private final CostContainer heatingAndMaintenanceCosts;
-    private double recycleRate;
+    private final double recycleRate;
     private int numberOfResidents = 0;
 
     // TODO explain param
@@ -37,22 +35,8 @@ public class Building {
     public record Record(int lifetime, MaterialBag shellConstruct, Apartment.Record apartmentSpecs, CostContainer heatingAndMaintenanceCosts, double recycleRate){}
 
 
-    /**
-     * Depending on the household amount of material I have to renovate
-     *
-     * @param percentageRenovated percentage of Apartments which should be renovated
-     * */
-    public CostContainer renovate(double percentageRenovated) {
-        CostContainer renovatingCost = new CostContainer(0, 0, 0);
-        int i = this.renovationIndex;
-        int amountApartments = (int) (this.apartments.length * percentageRenovated);
-        CostContainer cost = new CostContainer(0f, 0f, 0f);
-        for(; i < (this.renovationIndex+amountApartments) % this.apartments.length; i++){
-            cost = apartments[i].renovate();
-            renovatingCost = renovatingCost.addCostContainer(cost);
-        }
-        this.renovationIndex = i%this.apartments.length;
-        return renovatingCost.multiplyContainer((double) 1/numberOfResidents);
+    public Apartment[] getApartments() {
+        return apartments;
     }
 
     /**
