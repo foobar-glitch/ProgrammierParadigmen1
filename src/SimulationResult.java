@@ -3,8 +3,9 @@ import java.util.ArrayList;
 // algebraic abstraction: result of a single simulation; collects and calculates the metrics that the assignment specified
 public class SimulationResult {
 
-    CostContainer[] costsPerYear;
-    Double[] happinessPerYear;
+    private final CostContainer[] costsPerYear;
+    private final Double[] happinessPerYear;
+    private final double renovationRate;
 
     // averages per person per year over the entire duration of the simulation
     private double averageCostOverLifetime;
@@ -15,10 +16,12 @@ public class SimulationResult {
     private final ArrayList<Double> averageCostPerDecade;
     private final ArrayList<Double> averageHappinessPerDecade;
 
-    private double sustainabilityScore;
+    private final double sustainabilityScore;
 
-    public SimulationResult(ArrayList<CostContainer> costsPerYear, ArrayList<Double> happinessPerYear) {
+    public SimulationResult(ArrayList<CostContainer> costsPerYear, ArrayList<Double> happinessPerYear, double renovationRate) {
         int simulationDuration = costsPerYear.size();
+
+        this.renovationRate = renovationRate;
 
         this.costsPerYear = new CostContainer[simulationDuration];
         costsPerYear.toArray(this.costsPerYear);
@@ -89,6 +92,8 @@ public class SimulationResult {
     public CostContainer[] getCostsPerYear() {return costsPerYear;}
 
     public Double[] getHappinessPerYear() {return happinessPerYear;}
+
+    public double getRenovationRate() {return renovationRate;}
 
     public double getAverageCostOverLifetime() {
         return averageCostOverLifetime;

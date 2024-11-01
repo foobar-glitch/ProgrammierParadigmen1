@@ -63,6 +63,7 @@ public class Main {
                 Simulation simulation = new Simulation(buildingsTestConfigs[i], interiorsTestConfigs[i]);
                 results.add(simulation.runSimulation(catastrophes));
                 System.out.printf("\tNachhaltigkeits-Score: %f%n", results.get(j).getSustainabilityScore());
+                System.out.printf("\trenovationRate: %f%%%n", results.get(j).getRenovationRate()*100.0);
             }
 
 

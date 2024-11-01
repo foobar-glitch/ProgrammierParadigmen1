@@ -10,15 +10,18 @@ import java.util.Comparator;
 public class Simulation {
 
 
-    private Building building;
+    private final Building building;
 
-    private ArrayList<CostContainer> costsPerYear;
-    private ArrayList<Double> happinessPerYear;
+    private final ArrayList<CostContainer> costsPerYear;
+    private final ArrayList<Double> happinessPerYear;
+
+    private int totalNumberOfRenovations;
 
     public Simulation(Building.Record buildingSpecs, Apartment.Record apartmentSpecs) {
         this.building = new Building(buildingSpecs, apartmentSpecs);
         this.costsPerYear = new ArrayList<CostContainer>();
         this.happinessPerYear = new ArrayList<Double>();
+        this.totalNumberOfRenovations = 0;
     }
 
     // run the simulation with the parameters that have been specified in the objects initialization
@@ -31,6 +34,7 @@ public class Simulation {
             for (Apartment apartment : building.getApartments()) {
                 if (Math.random() < 1.0/apartment.getLifetime()) {
                     costsThisYear.addCostContainer(apartment.renovate());
+                    totalNumberOfRenovations++;
                 }
             }
 
@@ -45,12 +49,13 @@ public class Simulation {
                         System.out.println("\tCritical Event. Demolishing.");
                         costsThisYear = costsThisYear.addCostContainer(building.demolishing());
                         costsPerYear.add(costsThisYear);
-                        return new SimulationResult(costsPerYear, happinessPerYear);
+                        return new SimulationResult(costsPerYear, happinessPerYear, totalNumberOfRenovations);
                     }
 
                     for (Apartment apartment : building.getApartments()) {
                         if (Math.random() < catastrophy.getDamage()) {
                             costsThisYear.addCostContainer(apartment.renovate());
+                            totalNumberOfRenovations++;
                         }
                     }
 
@@ -63,7 +68,8 @@ public class Simulation {
             costsThisYear = costsThisYear.addCostContainer(building.age());
             costsPerYear.add(costsThisYear);
         }
-        return new SimulationResult(costsPerYear, happinessPerYear);
+        double renovationRate = (double) building.getApartments().length / totalNumberOfRenovations;
+        return new SimulationResult(costsPerYear, happinessPerYear, renovationRate);
     }
 
 }
