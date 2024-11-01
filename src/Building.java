@@ -34,11 +34,6 @@ public class Building {
 
     public record Record(int lifetime, MaterialBag shellConstruct, Apartment.Record apartmentSpecs, CostContainer heatingAndMaintenanceCosts, double recycleRate){}
 
-
-    public Apartment[] getApartments() {
-        return apartments;
-    }
-
     /**
      * When demolishing you can recycle x percent of material and subtract that value
      * from the total costs
@@ -55,7 +50,7 @@ public class Building {
             leftoverMaterialCost = leftoverMaterialCost.addCostContainer(apartment.demolish(recycleRate));
         }
 
-        return leftoverMaterialCost.multiplyContainer((double) 1/numberOfResidents);
+        return leftoverMaterialCost.multiplyContainer(1.0/numberOfResidents);
     }
 
     /**
@@ -104,5 +99,12 @@ public class Building {
 
         return s/people;
     }
+
+    public Apartment[] getApartments() {
+        return apartments;
+    }
+
+    // returns the current year not how many years already passed
+    public int getAge() {return age+1;}
 
 }
