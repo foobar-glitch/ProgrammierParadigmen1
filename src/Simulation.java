@@ -40,9 +40,9 @@ public class Simulation {
             // Checking for catastrophe occurrence and add the cost
             for(Catastrophe catastrophy: catastrophes){
                 if(randomVal < catastrophy.getProbability()){
-                    System.out.printf("Event: %s happened%n", catastrophy.getEventName());
+                    System.out.printf("\tEvent: %s happened%n", catastrophy.getEventName());
                     if(catastrophy.getDamage() == 1.0){
-                        System.out.println("Critical Event. Demolishing.");
+                        System.out.println("\tCritical Event. Demolishing.");
                         costsThisYear = costsThisYear.addCostContainer(building.demolishing());
                         costsPerYear.add(costsThisYear);
                         return new SimulationResult(costsPerYear, happinessPerYear);

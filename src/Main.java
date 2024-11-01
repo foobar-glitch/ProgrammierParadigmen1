@@ -59,9 +59,10 @@ public class Main {
             // ten simulations per case
             ArrayList<SimulationResult> results = new ArrayList<SimulationResult>();
             for (int j = 0; j < 10; j++) {
+                System.out.printf("Simulation%d:%n", j + 1);
                 Simulation simulation = new Simulation(buildingsTestConfigs[i], interiorsTestConfigs[i]);
                 results.add(simulation.runSimulation(catastrophes));
-                System.out.printf("Nachhaltigkeits-Score fuer Simulation%d %f%n", j + 1, results.get(j).getSustainabilityScore());
+                System.out.printf("\tNachhaltigkeits-Score: %f%n", results.get(j).getSustainabilityScore());
             }
 
 
@@ -69,15 +70,17 @@ public class Main {
             SimulationResult medianResult = results.get(results.size()/2 + 1);
             System.out.println();
             System.out.printf("Alle Kennzahlen fuer den Simulationsdurchlauf mit dem Median-Nachhaltigkeits-Score:%n");
-            System.out.printf("- Nachhaltigkeits-Score: %f%n", medianResult.getSustainabilityScore());
-            System.out.printf("- averageCostOverLifetime: %f%n", medianResult.getAverageCostOverLifetime());
-            System.out.printf("- averageCo2OverLifetime: %f%n", medianResult.getAverageCo2OverLifetime());
-            System.out.printf("- averageWasteOverLifetime: %f%n", medianResult.getAverageWasteOverLifetime());
+            System.out.printf("\tNachhaltigkeits-Score: %f%n", medianResult.getSustainabilityScore());
+            System.out.printf("\taverageCostOverLifetime: %f%n", medianResult.getAverageCostOverLifetime());
+            System.out.printf("\taverageCo2OverLifetime: %f%n", medianResult.getAverageCo2OverLifetime());
+            System.out.printf("\taverageWasteOverLifetime: %f%n", medianResult.getAverageWasteOverLifetime());
+            System.out.println("\taverage cost per decade:");
             for (int j = 0; j < medianResult.getAverageCostPerDecade().size(); j++) {
-                System.out.printf("- AverageCostDecade%d: %f%n", j + 1, medianResult.getAverageCostPerDecade().get(j));
+                System.out.printf("\t\tDecade%d: %f%n", j + 1, medianResult.getAverageCostPerDecade().get(j));
             }
+            System.out.println("\taverage happiness per decade:");
             for (int j = 0; j < medianResult.getAverageCostPerDecade().size(); j++) {
-                System.out.printf("- AverageHappinessDecade%d: %f%n", j + 1, medianResult.getAverageHappinessPerDecade().get(j));
+                System.out.printf("\t\tDecade%d: %f%n", j + 1, medianResult.getAverageHappinessPerDecade().get(j));
             }
             System.out.println();
 
