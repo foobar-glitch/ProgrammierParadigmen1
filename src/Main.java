@@ -1,14 +1,9 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        Material[] materials = new Material[] {
-                new Material("wood", new CostContainer(125.0, 0.4, 0.01)),
-                new Material("concrete", new CostContainer(250.0, 0.8, 0.15)),
-                new Material("steel", new CostContainer(1200.0, 1.4, 0.007))
-        };
+        Material[] materials = Database.readOutAllMaterials();
 
         /*
         * Assuming that we have 10 apartments with each 50 sqm.
@@ -45,7 +40,8 @@ public class Main {
                 apartmentsHighEnd
         };
         double eventProbability = 0.05;
-        Catastrophe[] catastrophes = Catastrophe.readCatastrophesFromFile("src/ressources/Catastrophes.csv", eventProbability);
+
+        Catastrophe[] catastrophes = Database.readOutAllCatastrophes(eventProbability);
 
         for (int i = 0; i < buildingsTestConfigs.length; i++) {
             System.out.printf("---TEST CASE %d %s---%n", i + 1, namesTestCases[i]);
