@@ -8,14 +8,17 @@ public class Database {
 
     private static final String folderRoot = "src/ressources";
     private static final String filenameCatastrophes = "Catastrophes.csv";
+    private static final String filenameMaterials = "Materials.csv";
     private static final String filenameBuildingMaterials = "BuildingMaterials.csv";
 
     private static String[][] readCsv(String path, String[] headers) {
+        // TODO check for correct types?
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             ArrayList<String[]> entries = new ArrayList<String[]>();
             String fieldNames = bufferedReader.readLine();
             if (fieldNames != null) {
-                String[] names = fieldNames.split(", ");
+                String[] names = fieldNames.split("; ");
                 if (names.length != headers.length) {
                     throw new UnsupportedEncodingException(path + " in wrong format (wrong amount of headers)");
                 }
@@ -25,7 +28,7 @@ public class Database {
                     }
                 }
                 for (String line; (line = bufferedReader.readLine()) != null; ) {
-                    String[] values = line.split(", ");
+                    String[] values = line.split("; ");
                     if (values.length != names.length) {
                         throw new UnsupportedEncodingException(path + " in wrong format: " + line);
                     }
@@ -36,13 +39,29 @@ public class Database {
             }
             return entries.toArray(new String[0][0]);
         } catch (IOException e) {
-            throw new RuntimeException("File at: " + path + " does not exist");
+            throw new RuntimeException("Filepath: " + path + " ,Error: " + e);
         }
     }
 
     public static Material[] readOutAllMaterials() {
-        String path = folderRoot + "/" + filenameBuildingMaterials;
+        String path = folderRoot + "/" + filenameMaterials;
         String[] headers = {"(String) materialName", "(double) money", "(double) co2",  "(double) waste"};
+        String[][] entries = readCsv(path, headers);
+        ArrayList<Material> materials = new ArrayList<Material>();
+        for (String[] entry : entries) {
+            String name = entry[0];
+            double money = Double.parseDouble(entry[1]);
+            double co2 = Double.parseDouble(entry[2]);
+            double waste = Double.parseDouble(entry[3]);
+            materials.add(new Material(name, new CostContainer(money, co2, waste)));
+        }
+        return materials.toArray(new Material[0]);
+    }
+
+
+    public static Material[] readOutBuildingMaterials() {
+        String path = folderRoot + "/" + filenameBuildingMaterials;
+        String[] headers = {"(String) buildingMaterialsName", "(String[]) materials", "(double[]) amounts"};
         String[][] entries = readCsv(path, headers);
         ArrayList<Material> buildingMaterials = new ArrayList<Material>();
         for (String[] entry : entries) {
@@ -54,7 +73,6 @@ public class Database {
         }
         return buildingMaterials.toArray(new Material[0]);
     }
-
 
     public static Catastrophe[] readOutAllCatastrophes(double eventProbability) {
         String path = folderRoot + "/" + filenameCatastrophes;
