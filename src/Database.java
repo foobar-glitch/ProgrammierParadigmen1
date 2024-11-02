@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+// TODO maybe would be better if not static? better as a singleton?
 public class Database {
 
     private static final String folderRoot = "src/ressources";
@@ -11,9 +12,8 @@ public class Database {
     private static final String filenameMaterials = "Materials.csv";
     private static final String filenameBuildingMaterials = "BuildingMaterials.csv";
 
-    private static String[][] readCsv(String path, String[] headers) {
+    private String[][] readCsv(String path, String[] headers) {
         // TODO check for correct types?
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             ArrayList<String[]> entries = new ArrayList<String[]>();
             String fieldNames = bufferedReader.readLine();
@@ -43,7 +43,7 @@ public class Database {
         }
     }
 
-    public static Material[] readOutAllMaterials() {
+    public Material[] readOutAllMaterials() {
         String path = folderRoot + "/" + filenameMaterials;
         String[] headers = {"(String) materialName", "(double) money", "(double) co2",  "(double) waste"};
         String[][] entries = readCsv(path, headers);
@@ -58,23 +58,77 @@ public class Database {
         return materials.toArray(new Material[0]);
     }
 
+    // TODO better to have DB have a state and save all materials in a HashMap?
+    public Material readOutSingleMaterial(String materialName) {
+        String path = folderRoot + "/" + filenameMaterials;
+        String[] headers = {"(String) materialName", "(double) money", "(double) co2",  "(double) waste"};
+        String[][] entries = readCsv(path, headers);
+        ArrayList<Material> materials = new ArrayList<Material>();
+        for (String[] entry : entries) {
+            if (entry[0].equals(materialName)) {
+                String name = entry[0];
+                double money = Double.parseDouble(entry[1]);
+                double co2 = Double.parseDouble(entry[2]);
+                double waste = Double.parseDouble(entry[3]);
+                return new Material(name, new CostContainer(money, co2, waste));
+            }
+        }
+        throw new RuntimeException("Material  " + materialName + " could not be found in file " + filenameMaterials);
+    }
 
-    public static Material[] readOutBuildingMaterials() {
+    public MaterialBag[] readOutAllBuildingMaterials() {
         String path = folderRoot + "/" + filenameBuildingMaterials;
         String[] headers = {"(String) buildingMaterialsName", "(String[]) materials", "(double[]) amounts"};
         String[][] entries = readCsv(path, headers);
-        ArrayList<Material> buildingMaterials = new ArrayList<Material>();
+        ArrayList<MaterialBag> buildingMaterials = new ArrayList<MaterialBag>();
         for (String[] entry : entries) {
             String name = entry[0];
-            double money = Double.parseDouble(entry[1]);
-            double co2 = Double.parseDouble(entry[2]);
-            double waste = Double.parseDouble(entry[3]);
-            buildingMaterials.add(new Material(name, new CostContainer(money, co2, waste)));
+            // written as array with brackets
+            String[] materialNames = entry[1].replaceAll("[{|}]", "").split(", ");
+            ArrayList<Material> materials = new ArrayList<Material>();
+            for (String materialName : materialNames) {
+                materials.add(readOutSingleMaterial(materialName));
+            }
+            // TODO stream Strings to double???
+            String[] amountStrings = entry[2].replaceAll("[{|}]", "").split(", ");
+            Double[] amounts = new Double[amountStrings.length];
+            for (int i = 0; i < amountStrings.length; i++) {
+                amounts[i] = Double.parseDouble(amountStrings[i]);
+            }
+            buildingMaterials.add(new MaterialBag(materials.toArray(new Material[0]), amounts));
         }
-        return buildingMaterials.toArray(new Material[0]);
+        return buildingMaterials.toArray(new MaterialBag[0]);
     }
 
-    public static Catastrophe[] readOutAllCatastrophes(double eventProbability) {
+    // TODO better to have DB have a state and save all materials in a HashMap?
+    public MaterialBag readOutSingleBuildingMaterial(String BuildingMaterialsName) {
+        String path = folderRoot + "/" + filenameBuildingMaterials;
+        String[] headers = {"(String) buildingMaterialsName", "(String[]) materials", "(double[]) amounts"};
+        String[][] entries = readCsv(path, headers);
+        for (String[] entry : entries) {
+            if (entry[0].equals(BuildingMaterialsName)) {
+                String name = entry[0];
+                // written as array with brackets
+                String[] materialNames = entry[1].replaceAll("[{|}]", "").split(", ");
+                ArrayList<Material> materials = new ArrayList<Material>();
+                for (String materialName : materialNames) {
+                    materials.add(readOutSingleMaterial(materialName));
+                }
+                // TODO stream Strings to double???
+                String[] amountStrings = entry[2].replaceAll("[{|}]", "").split(", ");
+                Double[] amounts = new Double[amountStrings.length];
+                for (int i = 0; i < amountStrings.length; i++) {
+                    amounts[i] = Double.parseDouble(amountStrings[i]);
+                }
+                return new MaterialBag(materials.toArray(new Material[0]), amounts);
+            }
+        }
+
+
+        throw new RuntimeException("Material  " + BuildingMaterialsName + " could not be found in file " + filenameMaterials);
+    }
+
+    public Catastrophe[] readOutAllCatastrophes(double eventProbability) {
         String path = folderRoot + "/" + filenameCatastrophes;
         String[] headers = {"(String) eventName", "(double) damage", "(double) probability"};
         String[][] entries = readCsv(path, headers);

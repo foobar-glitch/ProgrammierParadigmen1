@@ -21,6 +21,6 @@ public class Material {
         return acquisitionCost;
     }
 
-    private  String getName() { return name;}
+    public String getName() { return name;}
 
 }
