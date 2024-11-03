@@ -13,10 +13,10 @@ public class Database {
 
     private static final String folderRoot = "src/ressources";
     private static final String filenameMaterials = "Materials.csv";
-    private static final String[] materialsHeaders  =
+    private static final String[] materialsHeaders =
             {"(String) materialName", "(double) money", "(double) co2", "(double) waste"};
     private static final String filenameBuildingMaterials = "BuildingMaterials.csv";
-    private static final String[] buildingMaterialsHeaders  =
+    private static final String[] buildingMaterialsHeaders =
             {"(String) buildingMaterialsName", "(String[]) materials", "(double[]) amounts"};
     private static final String filenameBuildingBlueprints = "BuildingBlueprints.csv";
     private static final String[] buildingBlueprintsHeaders =
@@ -30,7 +30,6 @@ public class Database {
 
     private Material[] allMaterialsArray = null;
     private final HashMap<String, Material> allMaterialsMap = new HashMap<String, Material>();
-
     private MaterialBag[] allBuildingMaterialsArray = null;
     private final HashMap<String, MaterialBag> allBuildingMaterialsMap = new HashMap<String, MaterialBag>();
 
@@ -94,7 +93,6 @@ public class Database {
                 .toArray(Material[]::new);
     }
 
-    // TODO better to have DB have a state and save all materials in a HashMap?
     public Material readOutSingleMaterial(String materialName) {
         if (allMaterialsMap.isEmpty()) {
             readOutAllMaterials();
@@ -115,7 +113,7 @@ public class Database {
             for (String[] entry : entries) {
                 String name = entry[0];
                 // written as array with brackets
-                Material[] materials =  Arrays.stream(entry[1].replaceAll("[{|}]", "").split(", "))
+                Material[] materials = Arrays.stream(entry[1].replaceAll("[{|}]", "").split(", "))
                         .map(this::readOutSingleMaterial)
                         .toArray(Material[]::new);
                 // written as array with brackets
@@ -164,7 +162,7 @@ public class Database {
             MaterialBag interiorMaterials = readOutSingleBuildingMaterial(entry[8]);
             int lifetimeApartment = Integer.parseInt(entry[9]);
             int residentNumberApartment = Integer.parseInt(entry[10]);
-            double happinessUpperBound  = Double.parseDouble(entry[11]);
+            double happinessUpperBound = Double.parseDouble(entry[11]);
             Building.Record buildingBlueprint = new Building.Record(
                     name,
                     buildingLifetime,

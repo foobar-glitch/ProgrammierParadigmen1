@@ -6,12 +6,10 @@ public class SimulationResult {
     private final CostContainer[] costsPerYear;
     private final Double[] happinessPerYear;
     private final double renovationRate;
-
     // averages per person per year over the entire duration of the simulation
     private double averageCostOverLifetime;
     private double averageCo2OverLifetime;
     private double averageWasteOverLifetime;
-
     // averages per person per year over all decades that the simulations took place
     private final ArrayList<Double> averageCostPerDecade;
     private final ArrayList<Double> averageHappinessPerDecade;
@@ -39,7 +37,6 @@ public class SimulationResult {
             averageCo2OverLifetime += costsPerYear.get(i).getCo2() / simulationDuration;
             averageWasteOverLifetime += costsPerYear.get(i).getWaste() / simulationDuration;
 
-
             int scaleFactor;
             if (i < simulationDuration - simulationDuration % 10) {
                 // data for the entire decade exists
@@ -48,7 +45,6 @@ public class SimulationResult {
                 // scale by the amount of years that are still simulated for in the last decade
                 scaleFactor = simulationDuration % 10;
             }
-
             if (i % 10 == 0) {
                 // add value for each beginning decade
                 averageCostPerDecade.add(costsPerYear.get(i).getCost() / scaleFactor);
@@ -61,12 +57,11 @@ public class SimulationResult {
                 averageHappinessPerDecade.set(i / 10, newValueHappiness);
             }
         }
-
         sustainabilityScore = extractSustainabilityScore();
     }
 
     // algebraic abstraction: calculates singular metric of sustainability
-   private  double extractSustainabilityScore() {
+    private double extractSustainabilityScore() {
         double scaleScore = 1.0;
         double weightCost = 0.05 / 3;
         double weightCo2 = 10.0 / 3;
@@ -78,7 +73,7 @@ public class SimulationResult {
             happinessByCost += averageHappinessPerDecade.get(i) / averageCostPerDecade.get(i);
         }
 
-        if(happinessByCost < 0){
+        if (happinessByCost < 0) {
             happinessByCost = 0;
         }
         double scoreCosts = 1.0 / (weightCost * averageCostOverLifetime);
@@ -86,14 +81,20 @@ public class SimulationResult {
         double scoreWaste = 1.0 / (weightWaste * averageWasteOverLifetime);
         double scoreHappiness = 1 + Math.sqrt(weightHappiness * happinessByCost);
 
-       return (double) (scaleScore * Math.sqrt((scoreCosts + scoreCo2 + scoreWaste) * scoreHappiness));
+        return (double) (scaleScore * Math.sqrt((scoreCosts + scoreCo2 + scoreWaste) * scoreHappiness));
     }
 
-    public CostContainer[] getCostsPerYear() {return costsPerYear;}
+    public CostContainer[] getCostsPerYear() {
+        return costsPerYear;
+    }
 
-    public Double[] getHappinessPerYear() {return happinessPerYear;}
+    public Double[] getHappinessPerYear() {
+        return happinessPerYear;
+    }
 
-    public double getRenovationRate() {return renovationRate;}
+    public double getRenovationRate() {
+        return renovationRate;
+    }
 
     public double getAverageCostOverLifetime() {
         return averageCostOverLifetime;

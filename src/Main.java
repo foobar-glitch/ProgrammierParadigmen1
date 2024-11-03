@@ -39,11 +39,6 @@ public class Main {
                 System.out.printf("\t\tDecade%d: %f%n", j + 1, medianResult.getAverageHappinessPerDecade().get(j));
             }
             System.out.println();
-
         }
-
-
     }
-
-
 }

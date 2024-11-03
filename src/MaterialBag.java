@@ -42,8 +42,6 @@ public class MaterialBag {
         this.materialInventory.put(material, newAmount);
     }
 
-
-
     /**
      * This function makes a copy of the object in which the amount of every
      * Material is changed by the factor in param multiplier
@@ -98,14 +96,12 @@ public class MaterialBag {
      */
     public MaterialBag getWaste(){
         MaterialBag tmp = new MaterialBag();
-
         for(Material m : materialInventory.keySet()){
             tmp.setMaterial(
                     m,
                     materialInventory.get(m)*m.getCost().getWaste()
             );
         }
-
         return tmp;
     }
 
@@ -148,7 +144,6 @@ public class MaterialBag {
      */
     public static MaterialBag readFromFile(String path){
         MaterialBag materialBag = new MaterialBag();
-
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(path))){
             for(String line; (line = bufferedReader.readLine()) != null; ) {
                 String[] values = line.split(", ");
@@ -170,7 +165,6 @@ public class MaterialBag {
         } catch (IOException e) {
             throw new RuntimeException("File: " + path + " does not exist");
         }
-
         return materialBag;
     }
 }

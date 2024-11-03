@@ -9,12 +9,9 @@ import java.util.Comparator;
 // and returns measurements for a buildings sustainability
 public class Simulation {
 
-
     private final Building building;
-
     private final ArrayList<CostContainer> costsPerYear;
     private final ArrayList<Double> happinessPerYear;
-
     private double totalNumberOfRenovations;
 
     public Simulation(Building.Record buildingBlueprint) {
@@ -40,7 +37,7 @@ public class Simulation {
             happinessPerYear.add(building.satisfaction());
 
             for (Apartment apartment : building.getApartments()) {
-                if (Math.random() < 1.0/apartment.getLifetime()) {
+                if (Math.random() < 1.0 / apartment.getLifetime()) {
                     costsThisYear.addCostContainer(apartment.renovate());
                     totalNumberOfRenovations++;
                 }
@@ -50,33 +47,29 @@ public class Simulation {
             // Sort the array by probability in ascending order
             Arrays.sort(catastrophes, Comparator.comparingDouble(Catastrophe::getProbability));
             // Checking for catastrophe occurrence and add the cost
-            for(Catastrophe catastrophe : catastrophes){
-                if(randomVal < catastrophe.getProbability()){
+            for (Catastrophe catastrophe : catastrophes) {
+                if (randomVal < catastrophe.getProbability()) {
                     System.out.printf("\tEvent: %s happened in year %d%n", catastrophe.getEventName(), building.getAge());
-                    if(catastrophe.getDamage() == 1.0){
+                    if (catastrophe.getDamage() == 1.0) {
                         System.out.println("\tCritical Event. Demolishing.");
                         costsThisYear = costsThisYear.addCostContainer(building.demolishing());
                         costsPerYear.add(costsThisYear);
                         return new SimulationResult(costsPerYear, happinessPerYear, renovationRate());
                     }
-
                     for (Apartment apartment : building.getApartments()) {
                         if (Math.random() < catastrophe.getDamage()) {
                             costsThisYear.addCostContainer(apartment.renovate());
                             totalNumberOfRenovations++;
                         }
                     }
-
                     // There can only be one event when using break
                     // Otherwise 0.1 would always trigger both 0.2 and 0.3
                     break;
                 }
             }
-
             costsThisYear = costsThisYear.addCostContainer(building.age());
             costsPerYear.add(costsThisYear);
         }
         return new SimulationResult(costsPerYear, happinessPerYear, renovationRate());
     }
-
 }
