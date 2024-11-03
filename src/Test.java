@@ -35,7 +35,14 @@ public class Test {
         Apartment.Record apartmentsEco = new Apartment.Record(interiorEco, residentsPApartment, numberOfApartments, 20,0.9);
         Building.Record buildingEco = new Building.Record("test", lifetimeBuilding, shellEco, apartmentsEco, heatingAndMaintenanceCostsEco,0.7f);
 
-        Simulation simulation = new Simulation(buildingEco);
+        Simulation simulation = new Simulation(
+                buildingEco,
+                new Terrain.Record(
+                        new Architecture(new int[]{100,100,100}),
+                        1.0f,
+                        new CostContainer(0,0,0),
+                        new CostContainer(0,0,0)
+                ));
         SimulationResult simResult = simulation.runSimulation(catastrophes);
 
 

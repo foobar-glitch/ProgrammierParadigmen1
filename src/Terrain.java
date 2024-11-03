@@ -46,6 +46,41 @@ public class Terrain implements UrbanElement{
         }
     }
 
+    public Terrain(Terrain.Record record, UrbanElement[] urbanElements){
+        this.buildingCost = record.buildCost();
+        this.maintainingCost = record.maintainingCost();
+        this.architecture = record.architecture();
+        this.quality = record.quality();
+        this.state = 1.0f;
+
+        this.urbanElements = urbanElements;
+
+        if(urbanElements != null && urbanElements.length > 0){
+            initialCost = new CostContainer();
+            int x = architecture.getX();
+            int y = architecture.getY();
+
+            for(UrbanElement elem: urbanElements){
+                Architecture tmp = elem.getArchitecture();
+                if(tmp.getX() <= x && tmp.getY() <= y){
+                    x-=tmp.getX();
+                    y-=tmp.getY();
+
+                    //Build Building
+                    initialCost = initialCost.addCostContainer(
+                            record.buildCost().multiplyContainer(
+                                    tmp.getFootprint()
+                            )
+                    );
+                    state-= (float) tmp.getFootprint() /architecture.getFootprint();
+                }
+                else{throw new IllegalArgumentException("UrbanElement too big for Terrain");}
+            }
+        }
+    }
+
+    public record Record(Architecture architecture, float quality, CostContainer buildCost, CostContainer maintainingCost){}
+
 
     /**
      * Every UrbanElement on this Terrain will be demolished
@@ -65,16 +100,18 @@ public class Terrain implements UrbanElement{
 
     @Override
     public CostContainer age() {
+        // Increment age
         age++;
 
-        //TODO: Calculate stuff (was one of the urbanElements demolished? if yes renaturate)
+        //Calculate stuff (was one of the urbanElements demolished? if yes renaturate the new free space)
         int footprint = 0;
         for(UrbanElement elem : urbanElements){
             footprint+=elem.getArchitecture().getFootprint();
         }
-        int newState = footprint / architecture.getFootprint();
-        if(state != newState){
-            // Renaturate
+        float newState = 1 - (float) footprint / architecture.getFootprint();
+        if(state < newState){
+            state*=(1+quality);
+            if(state > newState) state = newState;
         }
 
 
@@ -97,7 +134,41 @@ public class Terrain implements UrbanElement{
 
     @Override
     public double satisfaction() {
-        return building.satisfaction()*quality*state;
+
+        if(urbanElements == null || urbanElements.length == 0) return 0d;
+
+        double satisfaction = 0d;
+        for(UrbanElement elem : urbanElements){
+            satisfaction+=elem.satisfaction();
+        }
+        satisfaction/=urbanElements.length;
+
+        // In an awesome environment, peoples happiness is boosted /-\==> <==/-\ (is this art? i doubt it)
+        return satisfaction*(1+quality*state);
+    }
+
+    /**
+     * Demolishes UrbanElement elem if inside This
+     * @param elem UrbanElement which should be demolished
+     * @return Costs of demolishing the UrbanElement
+     */
+    public CostContainer demolish(UrbanElement elem){
+        CostContainer tmp = new CostContainer();
+
+        // check if UrbanElement is built on This
+        for(UrbanElement u : urbanElements){
+            // If elem is inside
+            if(u.equals(elem)){
+                UrbanElement[] newElems = new UrbanElement[urbanElements.length-1];
+                int index=0;
+                for(UrbanElement e : urbanElements){
+                    if(!e.equals(elem)) newElems[index++] = e;
+                }
+                urbanElements = newElems;
+                return elem.demolishing();
+            }
+        }
+        return tmp;
     }
 
     @Override

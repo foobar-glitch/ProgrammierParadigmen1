@@ -10,12 +10,14 @@ import java.util.Comparator;
 public class Simulation {
 
     private final Building building;
+    private final Terrain terrain;
     private final ArrayList<CostContainer> costsPerYear;
     private final ArrayList<Double> happinessPerYear;
     private double totalNumberOfRenovations;
 
-    public Simulation(Building.Record buildingBlueprint) {
+    public Simulation(Building.Record buildingBlueprint, Terrain.Record terrainBlueprint) {
         this.building = new Building(buildingBlueprint);
+        this.terrain = new Terrain(terrainBlueprint, new UrbanElement[]{building});
         this.costsPerYear = new ArrayList<CostContainer>();
         this.happinessPerYear = new ArrayList<Double>();
         this.totalNumberOfRenovations = 0;
@@ -34,7 +36,8 @@ public class Simulation {
     public SimulationResult runSimulation(Catastrophe[] catastrophes) {
         while (building.checkAge()) {
             CostContainer costsThisYear = new CostContainer(0.0f, 0.0f, 0.0f);
-            happinessPerYear.add(building.satisfaction());
+            // Add the happiness including from terrain
+            happinessPerYear.add(terrain.satisfaction());
 
             for (Apartment apartment : building.getApartments()) {
                 if (Math.random() < 1.0 / apartment.getLifetime()) {
@@ -52,7 +55,7 @@ public class Simulation {
                     System.out.printf("\tEvent: %s happened in year %d%n", catastrophe.getEventName(), building.getAge());
                     if (catastrophe.getDamage() == 1.0) {
                         System.out.println("\tCritical Event. Demolishing.");
-                        costsThisYear = costsThisYear.addCostContainer(building.demolishing());
+                        costsThisYear = costsThisYear.addCostContainer(terrain.demolishing());
                         costsPerYear.add(costsThisYear);
                         return new SimulationResult(costsPerYear, happinessPerYear, renovationRate());
                     }
@@ -67,7 +70,7 @@ public class Simulation {
                     break;
                 }
             }
-            costsThisYear = costsThisYear.addCostContainer(building.age());
+            costsThisYear = costsThisYear.addCostContainer(terrain.age());
             costsPerYear.add(costsThisYear);
         }
         return new SimulationResult(costsPerYear, happinessPerYear, renovationRate());

@@ -5,6 +5,18 @@ public class Main {
     public static void main(String[] args) {
         Database db = new Database();
         Building.Record[] testCases = db.readOutAllBuildingBlueprints();
+
+        // Temporary
+        Terrain.Record[] terrainRecords = new Terrain.Record[testCases.length];
+        for(int i=0; i < testCases.length; i++){
+            terrainRecords[i] = new Terrain.Record(
+                    new Architecture(new int[]{100,100,100}),
+                    1.0f,
+                    new CostContainer(0,0,0),
+                    new CostContainer(0,0,0)
+            );
+        }
+
         double eventProbability = 0.05;
         Catastrophe[] catastrophes = db.readOutAllCatastrophes(eventProbability);
 
@@ -15,7 +27,7 @@ public class Main {
             ArrayList<SimulationResult> results = new ArrayList<SimulationResult>();
             for (int j = 0; j < 10; j++) {
                 System.out.printf("Simulation%d:%n", j + 1);
-                Simulation simulation = new Simulation(testCases[i]);
+                Simulation simulation = new Simulation(testCases[i], terrainRecords[i]);
                 results.add(simulation.runSimulation(catastrophes));
                 System.out.printf("\tNachhaltigkeits-Score: %f%n", results.get(j).getSustainabilityScore());
                 System.out.printf("\trenovationRate: %.2f%%%n", results.get(j).getRenovationRate()*100.0);

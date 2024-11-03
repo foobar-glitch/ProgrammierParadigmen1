@@ -29,6 +29,7 @@ public class Building implements UrbanElement{
         for (Apartment apartment : apartments) {
             this.numberOfResidents += apartment.getNumberOfResidents();
         }
+        this.architecture = new Architecture(new int[]{100,100,100});
     }
 
     public record Record(String name, int lifetime, MaterialBag shellConstruct, Apartment.Record apartmentBlueprint,
