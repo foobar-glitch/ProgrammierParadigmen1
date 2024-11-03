@@ -17,6 +17,10 @@ public class Material {
         this.acquisitionCost = acquisitionCost;
     }
 
+    public Material copy() {
+        return new Material(this.name, this.acquisitionCost);
+    }
+
     public CostContainer getCost() {
         return acquisitionCost;
     }

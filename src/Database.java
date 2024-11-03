@@ -1,8 +1,10 @@
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 // TODO maybe would be better if not static? better as a singleton?
@@ -67,7 +69,10 @@ public class Database {
             }
             allMaterialsArray = materials.toArray(new Material[0]);
         }
-        return allMaterialsArray;
+        // return copy
+        return Arrays.stream(allMaterialsArray)
+                .map(material -> material == null ? null : material.copy())
+                .toArray(Material[]::new);
     }
 
     // TODO better to have DB have a state and save all materials in a HashMap?
@@ -76,6 +81,7 @@ public class Database {
             readOutAllMaterials();
         }
         if (allMaterialsMap.get(materialName) != null) {
+            // return copy
             return allMaterialsMap.get(materialName);
         } else {
             throw new RuntimeException("Material  " + materialName + " could not be found in file " + filenameMaterials);
@@ -91,34 +97,32 @@ public class Database {
             for (String[] entry : entries) {
                 String name = entry[0];
                 // written as array with brackets
-                String[] materialNames = entry[1].replaceAll("[{|}]", "").split(", ");
-                ArrayList<Material> materials = new ArrayList<Material>();
-                for (String materialName : materialNames) {
-                    materials.add(readOutSingleMaterial(materialName));
-                }
-                // TODO stream Strings to double???
-                String[] amountStrings = entry[2].replaceAll("[{|}]", "").split(", ");
-                Double[] amounts = new Double[amountStrings.length];
-                for (int i = 0; i < amountStrings.length; i++) {
-                    amounts[i] = Double.parseDouble(amountStrings[i]);
-                }
-
-                MaterialBag buildingMaterial = new MaterialBag(materials.toArray(new Material[0]), amounts);
+                Material[] materials =  Arrays.stream(entry[1].replaceAll("[{|}]", "").split(", "))
+                        .map(this::readOutSingleMaterial)
+                        .toArray(Material[]::new);
+                // written as array with brackets
+                Double[] amounts = Arrays.stream(entry[2].replaceAll("[{|}]", "").split(", "))
+                        .map(Double::parseDouble)
+                        .toArray(Double[]::new);
+                MaterialBag buildingMaterial = new MaterialBag(materials, amounts);
                 allBuildingMaterialsMap.put(name, buildingMaterial);
                 buildingMaterials.add(buildingMaterial);
             }
             allBuildingMaterialsArray = buildingMaterials.toArray(new MaterialBag[0]);
         }
-        return allBuildingMaterialsArray;
+        // return copy
+        return Arrays.stream(allBuildingMaterialsArray)
+                .map(buildingMaterial -> buildingMaterial == null ? null : buildingMaterial.copy())
+                .toArray(MaterialBag[]::new);
     }
 
-    // TODO better to have DB have a state and save all materials in a HashMap?
     public MaterialBag readOutSingleBuildingMaterial(String BuildingMaterialsName) {
         if (allBuildingMaterialsMap.isEmpty()) {
             readOutAllBuildingMaterials();
         }
         if (allBuildingMaterialsMap.get(BuildingMaterialsName) != null) {
-            return allBuildingMaterialsMap.get(BuildingMaterialsName);
+            // return copy
+            return allBuildingMaterialsMap.get(BuildingMaterialsName).copy();
         } else {
             throw new RuntimeException("Material  " + BuildingMaterialsName + " could not be found in file " + filenameBuildingMaterials);
         }
