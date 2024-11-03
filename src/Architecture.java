@@ -18,9 +18,29 @@ public class Architecture {
         return dimensions;
     }
 
+    int getX(){return dimensions[0];}
+    int getY(){return dimensions[1];}
+    int getZ(){return dimensions[2];}
 
-    int compare(Architecture architecture){
-        return 0;
+    /**
+     * @param architecture Architecture to compare
+     * @return 1 if this object is bigger, 0 if both are equal, -1 if this is smaller
+     */
+    int compareFootprint(Architecture architecture){
+
+        if(getX() > architecture.getX() && getY() > architecture.getY()){
+            return 1;
+        }
+
+        if(getX() == architecture.getX() && getY() == architecture.getY()){
+            return 0;
+        }
+
+        return -1;
+    }
+
+    int getFootprint(){
+        return getX()*getY();
     }
 
 }

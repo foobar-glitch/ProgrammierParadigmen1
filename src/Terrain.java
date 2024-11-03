@@ -1,47 +1,65 @@
 public class Terrain implements UrbanElement{
 
     /* Cost of Building on terrain per m^2 */
-    private CostContainer buildingCost, maintainingCost;
+    private CostContainer buildingCost, maintainingCost, initialCost;
     /* Building built on terrain */
-    private Building building;
+    private UrbanElement[] urbanElements;
     /* */
-    private final int length, width;
+    private final Architecture architecture;
     /* */
     private float quality;
     /* */
     private float state;
     private int age = 0;
 
-    public Terrain(int length, int width, float quality, CostContainer buildCost, CostContainer maintainingCost, Building building){
+    public Terrain(Architecture architecture, float quality, CostContainer buildCost, CostContainer maintainingCost, UrbanElement[] urbanElements){
         if(buildCost == null || maintainingCost == null){ throw new IllegalArgumentException("Neither cost nor building can be null");}
         this.buildingCost = buildCost;
         this.maintainingCost = maintainingCost;
-        this.length = length;
-        this.width = width;
+        this.architecture = architecture;
         this.quality = quality;
         this.state = 1.0f;
 
-        if(building != null){
-            // TODO
-            int buildingWidth = building.architecture().getDimensions()[0];
-            int buildingLength = building.architecture().getDimensions()[1];
+        this.urbanElements = urbanElements;
 
-            // check if Building size <= Terrain size
-            if(buildingLength > length || buildingWidth > width){
-                throw new IllegalArgumentException("Building bigger than Terrain");
+        if(urbanElements != null && urbanElements.length > 0){
+            initialCost = new CostContainer();
+            int x = architecture.getX();
+            int y = architecture.getY();
+
+            for(UrbanElement elem: urbanElements){
+                Architecture tmp = elem.getArchitecture();
+                if(tmp.getX() <= x && tmp.getY() <= y){
+                    x-=tmp.getX();
+                    y-=tmp.getY();
+
+                    //Build Building
+                    initialCost = initialCost.addCostContainer(
+                            buildCost.multiplyContainer(
+                                    tmp.getFootprint()
+                            )
+                    );
+                    state-= (float) tmp.getFootprint() /architecture.getFootprint();
+                }
+                else{throw new IllegalArgumentException("UrbanElement too big for Terrain");}
             }
-
-            // Calculate percentage of preserved terrain
-            this.state = 1 - (float) (buildingLength * buildingWidth) / length*width;
         }
     }
 
 
+    /**
+     * Every UrbanElement on this Terrain will be demolished
+     * @return Demolishing costs
+     */
     @Override
     public CostContainer demolishing() {
-        if(building == null){return new CostContainer();}
-        CostContainer tmp = building.demolishing();
-        building = null;
+        if(urbanElements == null || urbanElements.length == 0){return new CostContainer();}
+
+        CostContainer tmp = new CostContainer();
+        for(UrbanElement elem : urbanElements){
+            tmp = tmp.addCostContainer(elem.demolishing());
+        }
+        urbanElements = new UrbanElement[]{};
         return tmp;
     }
 
@@ -49,21 +67,30 @@ public class Terrain implements UrbanElement{
     public CostContainer age() {
         age++;
 
-        if(building == null){
-            // Renaturate Terrain if building was demolished
-            if(state < 1){
-                state = state*(1+quality);
-            }
-            return maintainingCost.multiplyContainer(state);
+        //TODO: Calculate stuff (was one of the urbanElements demolished? if yes renaturate)
+        int footprint = 0;
+        for(UrbanElement elem : urbanElements){
+            footprint+=elem.getArchitecture().getFootprint();
+        }
+        int newState = footprint / architecture.getFootprint();
+        if(state != newState){
+            // Renaturate
         }
 
-        CostContainer tmp = building.age();
-        tmp = tmp.addCostContainer(calculateOwnCost());
 
-        // Add costs of building the object on terrain
-        if(age==1){
-            tmp.addCostContainer(buildingCost.multiplyContainer(1-state));
+        CostContainer tmp = new CostContainer();
+
+        // For building UrbanElementsOnTerrain costs
+        tmp = tmp.addCostContainer(initialCost);
+        initialCost=new CostContainer();
+
+        // Add all elements annual costs
+        for(UrbanElement elem : urbanElements){
+            tmp = tmp.addCostContainer(elem.age());
         }
+
+        // Add Maintaining Costs (perhaps CO2 deficites if trees)
+        tmp.addCostContainer(calculateOwnCost());
 
         return tmp;
     }
@@ -76,6 +103,11 @@ public class Terrain implements UrbanElement{
     @Override
     public int getAge() {
         return age;
+    }
+
+    @Override
+    public Architecture getArchitecture() {
+        return architecture;
     }
 
     private CostContainer calculateOwnCost(){

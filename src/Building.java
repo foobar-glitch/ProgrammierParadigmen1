@@ -113,7 +113,7 @@ public class Building implements UrbanElement{
         return age + 1;
     }
 
-    public Architecture architecture(){
+    public Architecture getArchitecture(){
         return  architecture;
     }
 }
