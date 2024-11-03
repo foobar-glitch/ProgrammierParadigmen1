@@ -18,4 +18,9 @@ public class Architecture {
         return dimensions;
     }
 
+
+    int compare(Architecture architecture){
+        return 0;
+    }
+
 }
