@@ -12,21 +12,21 @@ public class Building {
     private Architecture architecture;
 
     // TODO explain param
-    public Building(Building.Record buildingSpecs, Apartment.Record apartmentSpecs)
+    public Building(Building.Record buildingBlueprint)
     {
         this.age = 0;
-        this.lifetime = buildingSpecs.lifetime();
-        this.shellConstruct = buildingSpecs.shellConstruct();
-        this.heatingAndMaintenanceCosts = buildingSpecs.heatingAndMaintenanceCosts();
-        this.recycleRate = buildingSpecs.recycleRate();
+        this.lifetime = buildingBlueprint.lifetime();
+        this.shellConstruct = buildingBlueprint.shellConstruct();
+        this.heatingAndMaintenanceCosts = buildingBlueprint.heatingAndMaintenanceCosts();
+        this.recycleRate = buildingBlueprint.recycleRate();
 
-        this.apartments = new Apartment[apartmentSpecs.numberOfApartments()];
-        for(int i = 0; i < apartmentSpecs.numberOfApartments(); i++){
+        this.apartments = new Apartment[buildingBlueprint.apartmentBlueprint().numberOfApartments()];
+        for(int i = 0; i < buildingBlueprint.apartmentBlueprint().numberOfApartments(); i++){
             apartments[i] = new Apartment(
-                    apartmentSpecs.material(),
-                    apartmentSpecs.lifetimeApartment(),
-                    apartmentSpecs.residentNumber(),
-                    apartmentSpecs.happinessUpperBound());
+                    buildingBlueprint.apartmentBlueprint().material(),
+                    buildingBlueprint.apartmentBlueprint().lifetimeApartment(),
+                    buildingBlueprint.apartmentBlueprint().residentNumber(),
+                    buildingBlueprint.apartmentBlueprint().happinessUpperBound());
         }
 
         for(Apartment apartment: apartments){
@@ -34,7 +34,7 @@ public class Building {
         }
     }
 
-    public record Record(String name, int lifetime, MaterialBag shellConstruct, Apartment.Record apartmentSpecs, CostContainer heatingAndMaintenanceCosts, double recycleRate){}
+    public record Record(String name, int lifetime, MaterialBag shellConstruct, Apartment.Record apartmentBlueprint, CostContainer heatingAndMaintenanceCosts, double recycleRate){}
 
     /**
      * When demolishing you can recycle x percent of material and subtract that value
