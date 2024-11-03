@@ -8,6 +8,8 @@ public class Building {
     private final CostContainer heatingAndMaintenanceCosts;
     private final double recycleRate;
     private int numberOfResidents = 0;
+    /* Architecture of Building (e.g. Footprint, ...) */
+    private Architecture architecture;
 
     // TODO explain param
     public Building(Building.Record buildingSpecs, Apartment.Record apartmentSpecs)
