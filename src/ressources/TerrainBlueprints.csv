@@ -1,1 +1,2 @@
-(String) name; ()
+(String) terrainName;(int) length;(int) width;(float) quality;(double) buildCost;(double) buildCO2;(double) buildWaste;(double) maintainingCost;(double) maintainingCO2;(double) maintainingWaste
+forest; 150; 150; 0.9; 1.0; 12.0; 13.0; -40.0; 21.1; 70.0;

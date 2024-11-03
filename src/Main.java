@@ -6,15 +6,11 @@ public class Main {
         Database db = new Database();
         Building.Record[] testCases = db.readOutAllBuildingBlueprints();
 
-        // Temporary
+        // Can be changed to simulate different Terrains
         Terrain.Record[] terrainRecords = new Terrain.Record[testCases.length];
+        Terrain.Record simulationTerrain = new Database().readOutAllTerrainBlueprints()[0];
         for(int i=0; i < testCases.length; i++){
-            terrainRecords[i] = new Terrain.Record(
-                    new Architecture(new int[]{100,100,100}),
-                    1.0f,
-                    new CostContainer(0,0,0),
-                    new CostContainer(0,0,0)
-            );
+            terrainRecords[i] = simulationTerrain;
         }
 
         double eventProbability = 0.05;

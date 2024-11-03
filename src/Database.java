@@ -32,14 +32,15 @@ public class Database {
     private static final String[] terrainBlueprintsHeaders =
             {
                     "(String) terrainName",
-                    "(Int) length",
-                    "(Int) width",
-                    "(Double) buildCost",
-                    "(Double) buildCO2",
-                    "(Double) buildWaste",
-                    "(Double) maintainingCost",
-                    "(Double) maintainingCO2",
-                    "(Double) maintainingWaste"
+                    "(int) length",
+                    "(int) width",
+                    "(float) quality",
+                    "(double) buildCost",
+                    "(double) buildCO2",
+                    "(double) buildWaste",
+                    "(double) maintainingCost",
+                    "(double) maintainingCO2",
+                    "(double) maintainingWaste"
             };
 
 
@@ -47,6 +48,7 @@ public class Database {
     private final HashMap<String, Material> allMaterialsMap = new HashMap<String, Material>();
     private MaterialBag[] allBuildingMaterialsArray = null;
     private final HashMap<String, MaterialBag> allBuildingMaterialsMap = new HashMap<String, MaterialBag>();
+    private HashMap<String, Terrain.Record> allTerrainRecordsMap = new HashMap<String, Terrain.Record>();
 
     private String[][] readCsv(String path, String[] headers) {
         // TODO check for correct types?
@@ -157,7 +159,9 @@ public class Database {
         }
     }
 
-    public Building.Record[] readOutAllBuildingBlueprints() {
+    public Building.Record[] readOutAllBuildingBlueprints(){
+        this.readOutAllTerrainBlueprints();
+
         String path = folderRoot + "/" + filenameBuildingBlueprints;
         String[][] entries = readCsv(path, buildingBlueprintsHeaders);
         ArrayList<Building.Record> buildingBlueprints = new ArrayList<Building.Record>();
@@ -178,6 +182,7 @@ public class Database {
             int lifetimeApartment = Integer.parseInt(entry[9]);
             int residentNumberApartment = Integer.parseInt(entry[10]);
             double happinessUpperBound = Double.parseDouble(entry[11]);
+
             Building.Record buildingBlueprint = new Building.Record(
                     name,
                     buildingLifetime,
@@ -210,10 +215,40 @@ public class Database {
         return catastrophes.toArray(new Catastrophe[0]);
     }
 
-    public Terrain[] readOutAllTerrainBlueprints(){
-        readCsv(filenameTerrainBlueprints, terrainBlueprintsHeaders);
-        //TODO: Implement ReadIn
-        return null;
+    public Terrain.Record[] readOutAllTerrainBlueprints(){
+        ArrayList<Terrain.Record> list = new ArrayList<>();
+        String[][] entries = readCsv(folderRoot + "/" + filenameTerrainBlueprints, terrainBlueprintsHeaders);
+        for(String[] entry : entries){
+            // Kill all Spaces ;( (poor spaces)
+            for(int x=0; x<entry.length; x++)
+                entry[x] = entry[x].replaceAll(" ", "");
+            String name = entry[0];
+            int x = Integer.parseInt(entry[1]);
+            int y = Integer.parseInt(entry[2]);
+            float quality = Float.parseFloat(entry[3]);
+            double buildingCost = Double.parseDouble(entry[4]);
+            double buildingCO2 = Double.parseDouble(entry[5]);
+            double buildingWaste = Double.parseDouble(entry[6]);
+            double maintainingCost = Double.parseDouble(entry[7]);
+            double maintainingCO2 = Double.parseDouble(entry[8]);
+            double maintainingWaste = Double.parseDouble(entry[9]);
+            CostContainer bCost = new CostContainer(
+                    buildingCost,
+                    buildingCO2,
+                    buildingWaste
+            );
+            CostContainer mCost = new CostContainer(
+                    maintainingCost,
+                    maintainingCO2,
+                    maintainingWaste
+            );
+            Architecture architecture = new Architecture(new int[]{x,y, Integer.MAX_VALUE});
+            Terrain.Record record = new Terrain.Record(architecture, quality, bCost, mCost);
+            list.add(record);
+            allTerrainRecordsMap.put(name, record);
+        }
+
+        return list.toArray(new Terrain.Record[0]);
     }
 }
 
