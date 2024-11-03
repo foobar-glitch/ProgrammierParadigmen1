@@ -34,7 +34,7 @@ public class Building {
         }
     }
 
-    public record Record(int lifetime, MaterialBag shellConstruct, Apartment.Record apartmentSpecs, CostContainer heatingAndMaintenanceCosts, double recycleRate){}
+    public record Record(String name, int lifetime, MaterialBag shellConstruct, Apartment.Record apartmentSpecs, CostContainer heatingAndMaintenanceCosts, double recycleRate){}
 
     /**
      * When demolishing you can recycle x percent of material and subtract that value

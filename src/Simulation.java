@@ -17,8 +17,8 @@ public class Simulation {
 
     private double totalNumberOfRenovations;
 
-    public Simulation(Building.Record buildingSpecs, Apartment.Record apartmentSpecs) {
-        this.building = new Building(buildingSpecs, apartmentSpecs);
+    public Simulation(Building.Record buildingBlueprint) {
+        this.building = new Building(buildingBlueprint, buildingBlueprint.apartmentSpecs());
         this.costsPerYear = new ArrayList<CostContainer>();
         this.happinessPerYear = new ArrayList<Double>();
         this.totalNumberOfRenovations = 0;

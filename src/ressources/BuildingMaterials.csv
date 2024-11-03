@@ -1,7 +1,7 @@
-(String) buildingMaterialsName; (String[]) materials; (double[]) amounts
-shellMinimal; {wood, concrete, steel}; {216.0, 30.0, 3.75}
-interiorMinimal; {wood, concrete, steel}; {14.4, 2.0, 0.875}
-shellEco; {wood, concrete, steel}; {257.3, 10.0, 2.45}
-interiorEco; {wood, concrete, steel}; {14.4, 2.0, 0.875}
-shellHighEnd; {wood, concrete, steel}; {382.3, 48.6, 5.35}
-interiorHighEnd; {wood, concrete, steel}; {12.3, 1.9, 1.35}
+(String) buildingMaterialsName;(String[]) materials;(double[]) amounts
+shellMinimal;{wood, concrete, steel};{216.0, 30.0, 3.75}
+interiorMinimal;{wood, concrete, steel};{14.4, 2.0, 0.875}
+shellEco;{wood, concrete, steel};{257.3, 10.0, 2.45}
+interiorEco;{wood, concrete, steel};{14.4, 2.0, 0.875}
+shellHighEnd;{wood, concrete, steel};{382.3, 48.6, 5.35}
+interiorHighEnd;{wood, concrete, steel};{12.3, 1.9, 1.35}

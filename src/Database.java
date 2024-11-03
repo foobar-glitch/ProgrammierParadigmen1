@@ -20,10 +20,10 @@ public class Database {
             {"(String) buildingMaterialsName", "(String[]) materials", "(double[]) amounts"};
     private static final String filenameBuildingBlueprints = "BuildingBlueprints.csv";
     private static final String[] buildingBlueprintsHeaders =
-            {"(String) buildingName", "(String)terrain", "(String)architecture", "(int)buildingLifetime",
-                    "(MaterialBag)shellMaterials", "(CostContainer)heatingAndMaintenanceCosts", "(double)recycleRate",
-                    "(int)numberOfApartments", "(MaterialBag)interiorMaterials", "(int)lifetimeApartment",
-                    "(int)residentNumberApartment", "(double)happinessUpperBound"};
+            {"(String) buildingName", "(String) terrain", "(String) architecture", "(int) buildingLifetime",
+                    "(MaterialBag) shellMaterials", "(CostContainer) heatingAndMaintenanceCosts", "(double) recycleRate",
+                    "(int) numberOfApartments", "(MaterialBag) interiorMaterials", "(int) lifetimeApartment",
+                    "(int) residentNumberApartment", "(double) happinessUpperBound"};
     private static final String filenameCatastrophes = "Catastrophes.csv";
     private static final String[] catastrophesHeaders =
             {"(String) eventName", "(double) damage", "(double) probability"};
@@ -40,28 +40,29 @@ public class Database {
             ArrayList<String[]> entries = new ArrayList<String[]>();
             String fieldNames = bufferedReader.readLine();
             if (fieldNames != null) {
-                String[] names = fieldNames.split("; ");
+                String[] names = fieldNames.split(";");
                 if (names.length != headers.length) {
-                    throw new UnsupportedEncodingException(path + " in wrong format (wrong amount of headers)");
+                    throw new UnsupportedEncodingException("wrong format (wrong amount of headers, expected "
+                            + String.valueOf(headers.length) + " got, " + String.valueOf(names.length) + ")");
                 }
                 for (int i = 0; i < names.length; i++) {
                     if (!names[i].equals(headers[i])) {
-                        throw new UnsupportedEncodingException(path + " in wrong format (wrong headers)");
+                        throw new UnsupportedEncodingException("wrong format (wrong headers)");
                     }
                 }
                 for (String line; (line = bufferedReader.readLine()) != null; ) {
-                    String[] values = line.split("; ");
+                    String[] values = line.split(";");
                     if (values.length != names.length) {
-                        throw new UnsupportedEncodingException(path + " in wrong format: " + line);
+                        throw new UnsupportedEncodingException("wrong format: " + line);
                     }
                     entries.add(values);
                 }
             } else {
-                throw new UnsupportedEncodingException(path + " headers are empty");
+                throw new UnsupportedEncodingException("headers are empty");
             }
             return entries.toArray(new String[0][0]);
         } catch (IOException e) {
-            throw new RuntimeException("Filepath: " + path + " ,Error: " + e);
+            throw new RuntimeException("Filepath: " + path + ", Error: " + e);
         }
     }
 
@@ -165,6 +166,7 @@ public class Database {
             int residentNumberApartment = Integer.parseInt(entry[10]);
             double happinessUpperBound  = Double.parseDouble(entry[11]);
             Building.Record buildingBlueprint = new Building.Record(
+                    name,
                     buildingLifetime,
                     shellMaterials,
                     new Apartment.Record(

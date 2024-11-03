@@ -4,58 +4,22 @@ public class Main {
 
     public static void main(String[] args) {
         Database db = new Database();
-
-        /*
-        * Assuming that we have 10 apartments with each 50 sqm.
-        * */
-        MaterialBag shellMinimal = db.readOutSingleBuildingMaterial("shellMinimal");
-        MaterialBag  interiorMinimal = db.readOutSingleBuildingMaterial("interiorMinimal");
-        CostContainer heatingAndMaintenanceCostsMinimal = new CostContainer(0.35, 0.6, 0.05);
-        Apartment.Record apartmentsMinimal = new Apartment.Record(interiorMinimal, 1, 100, 20 ,0.8);
-        Building.Record buildingMinimal = new Building.Record(50, shellMinimal, apartmentsMinimal, heatingAndMaintenanceCostsMinimal, 0.5f);
-
-        MaterialBag shellEco = db.readOutSingleBuildingMaterial("shellEco");
-        MaterialBag  interiorEco = db.readOutSingleBuildingMaterial("interiorEco");
-        CostContainer heatingAndMaintenanceCostsEco = new CostContainer(0.35, 0.3, 0.05);
-        Apartment.Record apartmentsEco = new Apartment.Record(interiorEco, 1, 100, 20,0.9);
-        Building.Record buildingEco = new Building.Record(50, shellEco, apartmentsEco, heatingAndMaintenanceCostsEco,0.7f);
-
-        MaterialBag shellHighEnd = db.readOutSingleBuildingMaterial("shellHighEnd");
-        MaterialBag  interiorHighEnd = db.readOutSingleBuildingMaterial("interiorHighEnd");
-        CostContainer heatingAndMaintenanceHighEnd = new CostContainer(0.37, 0.32, 0.05);
-        Apartment.Record apartmentsHighEnd = new Apartment.Record(interiorHighEnd, 1, 100, 25,1.0);
-        Building.Record buildingHighEnd = new Building.Record(100, shellHighEnd, apartmentsHighEnd, heatingAndMaintenanceHighEnd,0.5f);
-
-        String[] namesTestCases = {
-                "MINIMAL",
-                "OEKOLOGISCH",
-                "HOCHWERTIG"};
-        Building.Record[] buildingsTestConfigs = new Building.Record[] {
-                buildingMinimal,
-                buildingEco,
-                buildingHighEnd};
-        Apartment.Record[] interiorsTestConfigs = new Apartment.Record[] {
-                apartmentsMinimal,
-                apartmentsEco,
-                apartmentsHighEnd
-        };
+        Building.Record[] testCases = db.readOutAllBuildingBlueprints();
         double eventProbability = 0.05;
-
         Catastrophe[] catastrophes = db.readOutAllCatastrophes(eventProbability);
 
-        for (int i = 0; i < buildingsTestConfigs.length; i++) {
-            System.out.printf("---TEST CASE %d %s---%n", i + 1, namesTestCases[i]);
+        for (int i = 0; i < testCases.length; i++) {
+            System.out.printf("---TEST CASE %d %s---%n", i + 1, testCases[i].name());
             System.out.println();
             // ten simulations per case
             ArrayList<SimulationResult> results = new ArrayList<SimulationResult>();
             for (int j = 0; j < 10; j++) {
                 System.out.printf("Simulation%d:%n", j + 1);
-                Simulation simulation = new Simulation(buildingsTestConfigs[i], interiorsTestConfigs[i]);
+                Simulation simulation = new Simulation(testCases[i]);
                 results.add(simulation.runSimulation(catastrophes));
                 System.out.printf("\tNachhaltigkeits-Score: %f%n", results.get(j).getSustainabilityScore());
                 System.out.printf("\trenovationRate: %.2f%%%n", results.get(j).getRenovationRate()*100.0);
             }
-
 
             results.sort((r1, r2) -> (int) Math.signum(r1.getSustainabilityScore() - r2.getSustainabilityScore()));
             SimulationResult medianResult = results.get(results.size()/2 + 1);

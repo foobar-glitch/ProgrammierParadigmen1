@@ -33,9 +33,9 @@ public class Test {
         MaterialBag  interiorEco = new MaterialBag(materials, new Double[] {14.4, 2.0, 0.875});
         CostContainer heatingAndMaintenanceCostsEco = new CostContainer(0.35, 0.3, 0.05);
         Apartment.Record apartmentsEco = new Apartment.Record(interiorEco, residentsPApartment, numberOfApartments, 20,0.9);
-        Building.Record buildingEco = new Building.Record(lifetimeBuilding, shellEco, apartmentsEco, heatingAndMaintenanceCostsEco,0.7f);
+        Building.Record buildingEco = new Building.Record("test", lifetimeBuilding, shellEco, apartmentsEco, heatingAndMaintenanceCostsEco,0.7f);
 
-        Simulation simulation = new Simulation(buildingEco, apartmentsEco);
+        Simulation simulation = new Simulation(buildingEco);
         SimulationResult simResult = simulation.runSimulation(catastrophes);
 
 
