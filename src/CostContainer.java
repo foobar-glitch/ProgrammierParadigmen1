@@ -16,6 +16,12 @@ public class CostContainer {
         this.waste = waste;
     }
 
+    public CostContainer(){
+        this.cost = 0;
+        this.co2 = 0;
+        this.waste = 0;
+    }
+
     /**
      * This adds another CostContainer on the current one
      * @param other The other CostContainer that it is summing with

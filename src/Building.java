@@ -1,4 +1,4 @@
-public class Building {
+public class Building implements UrbanElement{
     private final int lifetime;
     private int age;
     /* The materials of the shell of the building */
@@ -39,6 +39,7 @@ public class Building {
      * When demolishing you can recycle x percent of material and subtract that value
      * from the total costs
      */
+    @Override
     public CostContainer demolishing() {
         CostContainer leftoverMaterialCost = shellConstruct.getTotalCost();
         CostContainer recycledProfit = new CostContainer(
@@ -60,6 +61,7 @@ public class Building {
      * the aging.
      * return: Average cost over residents
      */
+    @Override
     public CostContainer age() {
         // Renovating all apartments the same amounts
         CostContainer ageingCosts = new CostContainer(0f, 0f, 0f);
@@ -89,6 +91,7 @@ public class Building {
     /**
      * @return Average Satisfaction of the Residents
      */
+    @Override
     public double satisfaction() {
 
         double s = 0.0f;
@@ -105,7 +108,12 @@ public class Building {
     }
 
     // returns the current year not how many years already passed
+    @Override
     public int getAge() {
         return age + 1;
+    }
+
+    public Architecture architecture(){
+        return  architecture;
     }
 }
