@@ -7,13 +7,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-// TODO maybe would be better if not static? better as a singleton?
+// TODO map headers to indices and access data that way?
+// TODO e.g. entry[map("name")] instead of entry[0]
 public class Database {
 
     private static final String folderRoot = "src/ressources";
-    private static final String filenameCatastrophes = "Catastrophes.csv";
     private static final String filenameMaterials = "Materials.csv";
+    private static final String[] materialsHeaders  =
+            {"(String) materialName", "(double) money", "(double) co2", "(double) waste"};
     private static final String filenameBuildingMaterials = "BuildingMaterials.csv";
+    private static final String[] buildingMaterialsHeaders  =
+            {"(String) buildingMaterialsName", "(String[]) materials", "(double[]) amounts"};
+    private static final String filenameBuildingBlueprints = "BuildingBlueprints.csv";
+    private static final String[] buildingBlueprintsHeaders =
+            {"(String) buildingName", "(String)terrain", "(String)architecture", "(int)buildingLifetime",
+                    "(MaterialBag)shellMaterials", "(CostContainer)heatingAndMaintenanceCosts", "(double)recycleRate",
+                    "(int)numberOfApartments", "(MaterialBag)interiorMaterials", "(int)lifetimeApartment",
+                    "(int)residentNumberApartment", "(double)happinessUpperBound"};
+    private static final String filenameCatastrophes = "Catastrophes.csv";
+    private static final String[] catastrophesHeaders =
+            {"(String) eventName", "(double) damage", "(double) probability"};
 
     private Material[] allMaterialsArray = null;
     private final HashMap<String, Material> allMaterialsMap = new HashMap<String, Material>();
@@ -52,11 +65,16 @@ public class Database {
         }
     }
 
+    private Double[] parseDoubleArray(String arrayAsString) {
+        return Arrays.stream(arrayAsString.replaceAll("[{|}]", "").split(", "))
+                .map(Double::parseDouble)
+                .toArray(Double[]::new);
+    }
+
     public Material[] readOutAllMaterials() {
         if (allMaterialsArray == null) {
             String path = folderRoot + "/" + filenameMaterials;
-            String[] headers = {"(String) materialName", "(double) money", "(double) co2", "(double) waste"};
-            String[][] entries = readCsv(path, headers);
+            String[][] entries = readCsv(path, materialsHeaders);
             ArrayList<Material> materials = new ArrayList<Material>();
             for (String[] entry : entries) {
                 String name = entry[0];
@@ -91,8 +109,7 @@ public class Database {
     public MaterialBag[] readOutAllBuildingMaterials() {
         if (allBuildingMaterialsArray == null) {
             String path = folderRoot + "/" + filenameBuildingMaterials;
-            String[] headers = {"(String) buildingMaterialsName", "(String[]) materials", "(double[]) amounts"};
-            String[][] entries = readCsv(path, headers);
+            String[][] entries = readCsv(path, buildingMaterialsHeaders);
             ArrayList<MaterialBag> buildingMaterials = new ArrayList<MaterialBag>();
             for (String[] entry : entries) {
                 String name = entry[0];
@@ -101,9 +118,7 @@ public class Database {
                         .map(this::readOutSingleMaterial)
                         .toArray(Material[]::new);
                 // written as array with brackets
-                Double[] amounts = Arrays.stream(entry[2].replaceAll("[{|}]", "").split(", "))
-                        .map(Double::parseDouble)
-                        .toArray(Double[]::new);
+                Double[] amounts = parseDoubleArray(entry[2]);
                 MaterialBag buildingMaterial = new MaterialBag(materials, amounts);
                 allBuildingMaterialsMap.put(name, buildingMaterial);
                 buildingMaterials.add(buildingMaterial);
@@ -128,10 +143,48 @@ public class Database {
         }
     }
 
+    public Building.Record[] readOutAllBuildingBlueprints() {
+        String path = folderRoot + "/" + filenameBuildingBlueprints;
+        String[][] entries = readCsv(path, buildingBlueprintsHeaders);
+        ArrayList<Building.Record> buildingBlueprints = new ArrayList<Building.Record>();
+        for (String[] entry : entries) {
+            String name = entry[0];
+            String terrain = entry[1];
+            String architecture = entry[2];
+            int buildingLifetime = Integer.parseInt(entry[3]);
+            MaterialBag shellMaterials = readOutSingleBuildingMaterial(entry[4]);
+            // TODO better way to split up array?
+            CostContainer heatingAndMaintenanceCosts = new CostContainer(
+                    parseDoubleArray(entry[5])[0],
+                    parseDoubleArray(entry[5])[1],
+                    parseDoubleArray(entry[5])[2]);
+            double recycleRate = Double.parseDouble(entry[6]);
+            int numberOfApartments = Integer.parseInt(entry[7]);
+            MaterialBag interiorMaterials = readOutSingleBuildingMaterial(entry[8]);
+            int lifetimeApartment = Integer.parseInt(entry[9]);
+            int residentNumberApartment = Integer.parseInt(entry[10]);
+            double happinessUpperBound  = Double.parseDouble(entry[11]);
+            Building.Record buildingBlueprint = new Building.Record(
+                    buildingLifetime,
+                    shellMaterials,
+                    new Apartment.Record(
+                            interiorMaterials,
+                            residentNumberApartment,
+                            numberOfApartments,
+                            lifetimeApartment,
+                            happinessUpperBound
+                    ),
+                    heatingAndMaintenanceCosts,
+                    recycleRate
+            );
+            buildingBlueprints.add(buildingBlueprint);
+        }
+        return buildingBlueprints.toArray(new Building.Record[0]);
+    }
+
     public Catastrophe[] readOutAllCatastrophes(double eventProbability) {
         String path = folderRoot + "/" + filenameCatastrophes;
-        String[] headers = {"(String) eventName", "(double) damage", "(double) probability"};
-        String[][] entries = readCsv(path, headers);
+        String[][] entries = readCsv(path, catastrophesHeaders);
         ArrayList<Catastrophe> catastrophes = new ArrayList<Catastrophe>();
         for (String[] entry : entries) {
             String name = entry[0];
