@@ -1,0 +1,1 @@
+(String) buildingName;(String) terrain;(String) architecture;(int) buildingLifetime;(MaterialBag) shellMaterials;(CostContainer) heatingAndMaintenanceCosts;(double) recycleRate;(int) numberOfApartments;(MaterialBag) interiorMaterials;(int) lifetimeApartment;(int) residentNumberApartment;(double) happinessUpperBound
