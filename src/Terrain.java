@@ -1,3 +1,9 @@
+/**
+ * This class simulates a space on which UrbanElements like Buildings can be built
+ * Depending on the space (how does it look, is there nature, ...) the satisfaction of the people changes
+ * and due to trees f.ex. the Carbon-Footprint of a Building can be reduced.
+ */
+
 public class Terrain implements UrbanElement{
 
     /* Cost of Building on terrain per m^2 */
