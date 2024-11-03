@@ -28,6 +28,21 @@ public class Database {
     private static final String[] catastrophesHeaders =
             {"(String) eventName", "(double) damage", "(double) probability"};
 
+    private static final String filenameTerrainBlueprints = "TerrainBlueprints.csv";
+    private static final String[] terrainBlueprintsHeaders =
+            {
+                    "(String) terrainName",
+                    "(Int) length",
+                    "(Int) width",
+                    "(Double) buildCost",
+                    "(Double) buildCO2",
+                    "(Double) buildWaste",
+                    "(Double) maintainingCost",
+                    "(Double) maintainingCO2",
+                    "(Double) maintainingWaste"
+            };
+
+
     private Material[] allMaterialsArray = null;
     private final HashMap<String, Material> allMaterialsMap = new HashMap<String, Material>();
     private MaterialBag[] allBuildingMaterialsArray = null;
@@ -193,6 +208,12 @@ public class Database {
             catastrophes.add(new Catastrophe(name, damage, probability));
         }
         return catastrophes.toArray(new Catastrophe[0]);
+    }
+
+    public Terrain[] readOutAllTerrainBlueprints(){
+        readCsv(filenameTerrainBlueprints, terrainBlueprintsHeaders);
+        //TODO: Implement ReadIn
+        return null;
     }
 }
 
