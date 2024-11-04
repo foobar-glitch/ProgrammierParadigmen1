@@ -1,21 +1,14 @@
 /*
-Aufgabenteilung Aufgabe 1:
 
+Aufgabe 1:
 Julian - Apartments, ApartmentSpecs, MaterialBag
-
 Marian - Main, Simulation, SimulationResult, BuildingSpecs
-
 Hamed - CostContainer, Building, Material
 
-Aufgabenteilung Aufgabe 2:
-
-Julian -
-
-Marian -    Test/Main, Database, Simulation , SimulationResult,
-            BuildingBlueprints/BuildingMaterials/Catastrophes/Materials CSV-Files,
-            "STYLE"-Comments
-
-Hamed - Catastrophes,
+Aufgabe 2:
+Julian - Terrain, Architecture, (little changes in Main, Test and Simulation to adapt to records and terrain-class), (Database readOutAllTerrainBlueprints())
+Marian -
+Hamed -
 
  */
 
