@@ -7,7 +7,7 @@ Hamed - CostContainer, Building, Material
 
 Aufgabe 2:
 Julian - Terrain, Architecture, (little changes in Main, Test and Simulation to adapt to records and terrain-class), (Database readOutAllTerrainBlueprints())
-Marian -
+Marian - simplified Test/Main and console outputs, created Database, small changes Simulation , BuildingBlueprints/BuildingMaterials/Catastrophes/Materials CSV-Files, "STYLE"-Comments
 Hamed -
 
  */
