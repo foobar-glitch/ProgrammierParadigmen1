@@ -10,7 +10,7 @@ Marian had the awesome idea of using a Kanban Board on Trello to collect and eva
 next. We met two times in person to talk about our ideas and possible implementations (if more than one person was affected).
 
 Julian - UrbanElement Interface, Terrain, Architecture, (little changes in Main, Test and Simulation to adapt to records and terrain-class), (Database readOutAllTerrainBlueprints())
-Marian -
+Marian - simplified Test/Main and console outputs, created Database, small changes Simulation , BuildingBlueprints/BuildingMaterials/Catastrophes/Materials CSV-Files, "STYLE"-Comments
 Hamed - Catastrophe (probabilities, example cases and calculations)
 
  */
