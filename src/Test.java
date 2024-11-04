@@ -11,7 +11,7 @@ next. We met two times in person to talk about our ideas and possible implementa
 
 Julian - UrbanElement Interface, Terrain, Architecture, (little changes in Main, Test and Simulation to adapt to records and terrain-class), (Database readOutAllTerrainBlueprints())
 Marian -
-Hamed -
+Hamed - Catastrophe (probabilities, example cases and calculations)
 
  */
 

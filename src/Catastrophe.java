@@ -20,7 +20,7 @@ public class Catastrophe {
             throw new IllegalArgumentException("Damage must be between 1 and 0");
         }
         if(probability>1 || probability<0){
-            throw new IllegalArgumentException("Probability must be between 1 and 1");
+            throw new IllegalArgumentException("Probability must be between 1 and 0");
         }
 
         this.eventName = eventName;
