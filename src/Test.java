@@ -6,6 +6,9 @@ Marian - Main, Simulation, SimulationResult, BuildingSpecs
 Hamed - CostContainer, Building, Material
 
 Aufgabe 2:
+Marian had the idea of using a Kanban Board on Trello to collect and evaluate ideas of what we could implement
+next. We met two times in person to talk about our ideas and possible implementations (if more than one person was affected).
+
 Julian - Terrain, Architecture, (little changes in Main, Test and Simulation to adapt to records and terrain-class), (Database readOutAllTerrainBlueprints())
 Marian -
 Hamed - Catastrophe (probabilities, example cases and calculations)
