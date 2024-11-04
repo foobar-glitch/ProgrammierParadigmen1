@@ -1,3 +1,10 @@
+// keeps and updates state of a apartment in a building during the course of a simulation
+// returns the current average happiness off all residents in the apartment
+// as well as the costs incurred by maintaining/demolishing the apartment
+// STYLE: nominal abstraction
+// just by changing the names of the variable and classes used here
+// this class might represent something completely different -> nominal
+// (e.g. could easily be offices in an office building instead of apartments)
 public class Apartment {
 
     /* Material used to build and renovate the apartment */

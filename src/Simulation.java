@@ -5,8 +5,14 @@ import java.util.Comparator;
 // contains state of the simulation and runs it
 // updates state with each time step accordingly
 // returns the values that we are measurement for
-// nominal abstraction: simulates the specific simulation that'S specified in the assignment
+// STYLE: nominal abstraction
+// simulates the specific simulation that's specified in the assignment
 // and returns measurements for a buildings sustainability
+// just by changing the names of the variable and classes used here
+// this simulation might be for an entirely different experiment -> nominal
+// without this class's name and the naming of variables/classes used
+// it's not necessarily clear that the loops/interactions used in this class
+// are meant to run a simulation over time for specific simulation subject (in our case a building) -> nominal
 public class Simulation {
 
     private final Building building;

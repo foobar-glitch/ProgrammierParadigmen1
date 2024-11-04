@@ -1,6 +1,13 @@
 import java.util.ArrayList;
 
-// algebraic abstraction: result of a single simulation; collects and calculates the metrics that the assignment specified
+// <result of a single simulation
+// collects and calculates the metrics that the assignment specified
+// STYLE: algebraic abstraction/nominal abstraction
+// there is a deterministic and easily algebraic describable relationship between
+// the constructor arguments and the return values of the getters/"extractSustainabilityScore" -> algebraic
+// without this class's name and the naming of variables/classes used
+// it's not necessarily clear that this class is meant to collect and process the results
+// of a simulation additionally the attribute-names impact the level of abstraction -> nominal
 public class SimulationResult {
 
     private final CostContainer[] costsPerYear;

@@ -1,3 +1,11 @@
+// implements Urban Element and represents a residential buildings
+// keeps and updates state of a building during the course of a simulation
+// returns the current average happiness accumulated from all apartments in the building
+// as well as the costs incurred by building/demolishing/maintaining the building
+// STYLE: nominal abstraction
+// just by changing the names of the variable and classes used here
+// this class might represent something completely different -> nominal
+// (e.g. could easily be an office building with offices instead of apartments)
 public class Building implements UrbanElement{
     private final int lifetime;
     private int age;
@@ -9,9 +17,8 @@ public class Building implements UrbanElement{
     private final double recycleRate;
     private int numberOfResidents = 0;
     /* Architecture of Building (e.g. Footprint, ...) */
-    private Architecture architecture;
+    private final Architecture architecture;
 
-    // TODO explain param
     public Building(Building.Record buildingBlueprint) {
         this.age = 0;
         this.lifetime = buildingBlueprint.lifetime();

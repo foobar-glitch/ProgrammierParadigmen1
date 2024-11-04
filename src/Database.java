@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-// TODO map headers to indices and access data that way?
-// TODO e.g. entry[map("name")] instead of entry[0]
+// reads in Data from csv-files
+// STYLE: nominal abstraction
+// just by changing the names of the variable and classes used here
+// this class might read out data for completely different subjects -> nominal
 public class Database {
-
+    // TODO map headers to indices and access data that way?
+    // TODO e.g. entry[map("name")] instead of entry[0]
     private static final String folderRoot = "src/ressources";
     private static final String filenameMaterials = "Materials.csv";
     private static final String[] materialsHeaders =
