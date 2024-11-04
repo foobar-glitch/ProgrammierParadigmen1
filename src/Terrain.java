@@ -160,6 +160,9 @@ public class Terrain implements UrbanElement{
         return architecture;
     }
 
+    /**
+     * @return Calculates annual maintaining cost of free Terrain
+     */
     private CostContainer calculateOwnCost(){
         return this.maintainingCost.multiplyContainer(state);
     }
