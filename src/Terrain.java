@@ -1,15 +1,20 @@
+import java.util.HashMap;
+
 /**
  * This class simulates a space on which UrbanElements like Buildings can be built
  * Depending on the space (how does it look, is there nature, ...) the satisfaction of the people changes
  * and due to trees f.ex. the Carbon-Footprint of a Building can be reduced.
  */
 
+//TODO: Implement Position of Terrain in city (distance to city center)
+//TODO: Compare UrbanElements and their Architecture to each other to calculate importance-Index
 public class Terrain implements UrbanElement{
 
     /* Cost of Building on terrain per m^2 */
     private CostContainer buildingCost, maintainingCost, initialCost;
     /* Building built on terrain */
     private UrbanElement[] urbanElements;
+    private HashMap<UrbanElement, Integer> importanceMap = new HashMap<>();
     /* */
     private final Architecture architecture;
     /* */
@@ -189,6 +194,26 @@ public class Terrain implements UrbanElement{
 
     private CostContainer calculateOwnCost(){
         return this.maintainingCost.multiplyContainer(state);
+    }
+
+    /**
+     * @return Average Architecture Specs of UrbanElements in this
+     */
+    private int calculateAverageArchitecturalImportance(){
+        if(urbanElements == null) return 0;
+        long footprint = 0;
+        for(UrbanElement elem : urbanElements){
+            footprint+=elem.getArchitecture().getVolume();
+        }
+        footprint/=urbanElements.length;
+        return (int) footprint;
+    }
+
+    private void indexImportanceOfUrbanElements(){
+        int average = calculateAverageArchitecturalImportance();
+        for(UrbanElement elem: urbanElements){
+            importanceMap.put(elem, elem.getArchitecture().compareVolume(average));
+        }
     }
 
 }

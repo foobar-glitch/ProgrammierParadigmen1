@@ -24,7 +24,7 @@ public class Architecture {
 
     /**
      * @param architecture Architecture to compare
-     * @return 1 if this object is bigger, 0 if both are equal, -1 if this is smaller
+     * @return =1 if this object is bigger, 0 if both are equal, -1 if this is smaller
      */
     int compareFootprint(Architecture architecture){
 
@@ -39,8 +39,27 @@ public class Architecture {
         return -1;
     }
 
+    /**
+     * @param architecture Object to compare with this
+     * @return >= 0 if this is bigger, 0 if it's the same, <0 if it's smaller
+     */
+    int compareVolume(Architecture architecture){
+        return (getVolume() - architecture.getVolume());
+    }
+
+    int compareVolume(int volume){
+        return (getVolume() - volume);
+    }
+
     int getFootprint(){
         return getX()*getY();
+    }
+
+    /**
+     * @return Volume of Architecture in m^3 (x*y*z)
+     */
+    public int getVolume(){
+        return getFootprint()*getZ();
     }
 
 }
