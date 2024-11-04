@@ -83,7 +83,7 @@ public class Database {
             }
             return entries.toArray(new String[0][0]);
         } catch (IOException e) {
-            throw new RuntimeException("Filepath: " + path + ", Error: " + e);
+            throw new RuntimeException("Filepath: " + path + "\nError: " + e);
         }
     }
 

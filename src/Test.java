@@ -9,72 +9,55 @@ Hamed - CostContainer, Building, Material
 
  */
 
-import java.rmi.UnexpectedException;
+import java.util.ArrayList;
 
 public class Test {
 
-    public static void main(String[] args) throws UnexpectedException {
-        Material[] materials = new Material[] {
-                new Material("wood", new CostContainer(125.0, 0.4, 0.01)),
-                new Material("concrete", new CostContainer(250.0, 0.8, 0.15)),
-                new Material("steel", new CostContainer(1200.0, 1.4, 0.007))
-        };
+    public static void main(String[] args) {
+        Database db = new Database();
+        Building.Record[] testCases = db.readOutAllBuildingBlueprints();
+
+        // Can be changed to simulate different Terrains
+        Terrain.Record[] terrainRecords = new Terrain.Record[testCases.length];
+        Terrain.Record simulationTerrain = new Database().readOutAllTerrainBlueprints()[0];
+        for(int i=0; i < testCases.length; i++){
+            terrainRecords[i] = simulationTerrain;
+        }
+
         double eventProbability = 0.05;
-        Catastrophe[] catastrophes = new Catastrophe[]{
-                new Catastrophe("Tornado", 0.3, eventProbability * 0.25),
-                new Catastrophe("Flood", 0.2, eventProbability * 0.15),
-                new Catastrophe("Earthquake", 0.5, eventProbability * 0.10),
-                new Catastrophe("Structural Collapse", 1, eventProbability * 0.05),
-                new Catastrophe("Minor Event", 0.1, eventProbability * 0.45),
-        };
+        Catastrophe[] catastrophes = db.readOutAllCatastrophes(eventProbability);
 
-        int numberOfApartments = 10, lifetimeBuilding = 50, residentsPApartment = 1;
-        MaterialBag shellEco = new MaterialBag(materials, new Double[] {257.3, 10.0, 2.45});
-        MaterialBag  interiorEco = new MaterialBag(materials, new Double[] {14.4, 2.0, 0.875});
-        CostContainer heatingAndMaintenanceCostsEco = new CostContainer(0.35, 0.3, 0.05);
-        Apartment.Record apartmentsEco = new Apartment.Record(interiorEco, residentsPApartment, numberOfApartments, 20,0.9);
-        Building.Record buildingEco = new Building.Record("test", lifetimeBuilding, shellEco, apartmentsEco, heatingAndMaintenanceCostsEco,0.7f);
+        for (int i = 0; i < testCases.length; i++) {
+            System.out.printf("---TEST CASE %d %s---%n", i + 1, testCases[i].name());
+            System.out.println();
+            // ten simulations per case
+            ArrayList<SimulationResult> results = new ArrayList<SimulationResult>();
+            for (int j = 0; j < 10; j++) {
+                System.out.printf("Simulation%d:%n", j + 1);
+                Simulation simulation = new Simulation(testCases[i], terrainRecords[i]);
+                results.add(simulation.runSimulation(catastrophes));
+                System.out.printf("\tNachhaltigkeits-Score: %f%n", results.get(j).getSustainabilityScore());
+                System.out.printf("\trenovationRate: %.2f%%%n", results.get(j).getRenovationRate()*100.0);
+            }
 
-        Simulation simulation = new Simulation(
-                buildingEco,
-                new Terrain.Record(
-                        new Architecture(new int[]{100,100,100}),
-                        1.0f,
-                        new CostContainer(0,0,0),
-                        new CostContainer(0,0,0)
-                ));
-        SimulationResult simResult = simulation.runSimulation(catastrophes);
-
-
-        /* Calculate Lower and Upper Bounds for the costs of a building in simulation */
-        CostContainer shellCosts = shellEco.getTotalCost();
-        CostContainer interiorCosts = interiorEco.getTotalCost();
-
-        CostContainer costLowerBound = shellCosts.addCostContainer(
-                interiorCosts.multiplyContainer(numberOfApartments)
-        );
-        // divide by number of residents
-        costLowerBound = costLowerBound.multiplyContainer((float) 1/(numberOfApartments*residentsPApartment*lifetimeBuilding));
-
-        CostContainer costUpperBound = shellCosts.addCostContainer(
-                interiorCosts.multiplyContainer(numberOfApartments*lifetimeBuilding)
-        ).multiplyContainer((float) 1/numberOfApartments*residentsPApartment*lifetimeBuilding);
-
-        if(costLowerBound.getCost() > simResult.getAverageCostOverLifetime()
-                || costLowerBound.getCo2() > simResult.getAverageCo2OverLifetime()
-                || costLowerBound.getWaste() > simResult.getAverageWasteOverLifetime()
-        ) {
-            throw new UnexpectedException("The results are too small.");
+            results.sort((r1, r2) -> (int) Math.signum(r1.getSustainabilityScore() - r2.getSustainabilityScore()));
+            SimulationResult medianResult = results.get(results.size()/2 + 1);
+            System.out.println();
+            System.out.printf("Alle Kennzahlen fuer den Simulationsdurchlauf mit dem Median-Nachhaltigkeits-Score:%n");
+            System.out.printf("\tNachhaltigkeits-Score: %f%n", medianResult.getSustainabilityScore());
+            System.out.printf("\trenovationRate: %.2f%%%n", medianResult.getRenovationRate()*100.0);
+            System.out.printf("\taverageCostOverLifetime: %f%n", medianResult.getAverageCostOverLifetime());
+            System.out.printf("\taverageCo2OverLifetime: %f%n", medianResult.getAverageCo2OverLifetime());
+            System.out.printf("\taverageWasteOverLifetime: %f%n", medianResult.getAverageWasteOverLifetime());
+            System.out.println("\taverage cost per decade:");
+            for (int j = 0; j < medianResult.getAverageCostPerDecade().size(); j++) {
+                System.out.printf("\t\tDecade%d: %f%n", j + 1, medianResult.getAverageCostPerDecade().get(j));
+            }
+            System.out.println("\taverage happiness per decade:");
+            for (int j = 0; j < medianResult.getAverageCostPerDecade().size(); j++) {
+                System.out.printf("\t\tDecade%d: %f%n", j + 1, medianResult.getAverageHappinessPerDecade().get(j));
+            }
+            System.out.println();
         }
-
-        if(costUpperBound.getCost() < simResult.getAverageCostOverLifetime()
-                || costUpperBound.getCo2() < simResult.getAverageCo2OverLifetime()
-                || costUpperBound.getWaste() < simResult.getAverageWasteOverLifetime()
-        ){
-            throw new UnexpectedException("The results are too big.");
-        }
-
-        System.out.println("Tests successful!");
-
     }
 }
