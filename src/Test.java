@@ -1,11 +1,14 @@
 /*
-hier ueber die Aufteilung der Arbeit etc. schreiben
 
+Aufgabe 1:
 Julian - Apartments, ApartmentSpecs, MaterialBag
-
 Marian - Main, Simulation, SimulationResult, BuildingSpecs
-
 Hamed - CostContainer, Building, Material
+
+Aufgabe 2:
+Julian - Terrain, Architecture, (Database readOutAllTerrainBlueprints())
+Marian -
+Hamed -
 
  */
 
