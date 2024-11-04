@@ -48,7 +48,7 @@ public class Database {
     private final HashMap<String, Material> allMaterialsMap = new HashMap<String, Material>();
     private MaterialBag[] allBuildingMaterialsArray = null;
     private final HashMap<String, MaterialBag> allBuildingMaterialsMap = new HashMap<String, MaterialBag>();
-    private HashMap<String, Terrain.Record> allTerrainRecordsMap = new HashMap<String, Terrain.Record>();
+    private final HashMap<String, Terrain.Record> allTerrainRecordsMap = new HashMap<String, Terrain.Record>();
 
     private String[][] readCsv(String path, String[] headers) {
         // TODO check for correct types?
@@ -56,6 +56,7 @@ public class Database {
             ArrayList<String[]> entries = new ArrayList<String[]>();
             String fieldNames = bufferedReader.readLine();
             if (fieldNames != null) {
+                fieldNames = fieldNames.replaceAll("; ", ";");
                 String[] names = fieldNames.split(";");
                 if (names.length != headers.length) {
                     throw new UnsupportedEncodingException("wrong format (wrong amount of headers, expected "
@@ -67,6 +68,7 @@ public class Database {
                     }
                 }
                 for (String line; (line = bufferedReader.readLine()) != null; ) {
+                    line = line.replaceAll("; ", ";");
                     String[] values = line.split(";");
                     if (values.length != names.length) {
                         throw new UnsupportedEncodingException("wrong format: " + line);
@@ -219,9 +221,6 @@ public class Database {
         ArrayList<Terrain.Record> list = new ArrayList<>();
         String[][] entries = readCsv(folderRoot + "/" + filenameTerrainBlueprints, terrainBlueprintsHeaders);
         for(String[] entry : entries){
-            // Kill all Spaces ;( (poor spaces)
-            for(int x=0; x<entry.length; x++)
-                entry[x] = entry[x].replaceAll(" ", "");
             String name = entry[0];
             int x = Integer.parseInt(entry[1]);
             int y = Integer.parseInt(entry[2]);
