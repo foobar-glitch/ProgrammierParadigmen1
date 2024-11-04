@@ -1,11 +1,21 @@
 /*
-hier ueber die Aufteilung der Arbeit etc. schreiben
+Aufgabenteilung Aufgabe 1:
 
 Julian - Apartments, ApartmentSpecs, MaterialBag
 
 Marian - Main, Simulation, SimulationResult, BuildingSpecs
 
 Hamed - CostContainer, Building, Material
+
+Aufgabenteilung Aufgabe 2:
+
+Julian -
+
+Marian -    Test/Main, Database, Simulation , SimulationResult,
+            BuildingBlueprints/BuildingMaterials/Catastrophes/Materials CSV-Files,
+            "STYLE"-Comments
+
+Hamed - Catastrophes,
 
  */
 
