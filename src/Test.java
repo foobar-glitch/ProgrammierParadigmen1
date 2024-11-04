@@ -8,7 +8,7 @@ Hamed - CostContainer, Building, Material
 Aufgabe 2:
 Julian - Terrain, Architecture, (little changes in Main, Test and Simulation to adapt to records and terrain-class), (Database readOutAllTerrainBlueprints())
 Marian -
-Hamed -
+Hamed - Catastrophe (probabilities, example cases and calculations)
 
  */
 
