@@ -1,20 +1,10 @@
-import java.util.HashMap;
-
-/**
- * This class simulates a space on which UrbanElements like Buildings can be built
- * Depending on the space (how does it look, is there nature, ...) the satisfaction of the people changes
- * and due to trees f.ex. the Carbon-Footprint of a Building can be reduced.
- */
-
-//TODO: Implement Position of Terrain in city (distance to city center)
-//TODO: Compare UrbanElements and their Architecture to each other to calculate importance-Index
 public class Terrain implements UrbanElement{
 
     /* Cost of Building on terrain per m^2 */
     private CostContainer buildingCost, maintainingCost, initialCost;
     /* Building built on terrain */
     private UrbanElement[] urbanElements;
-    private HashMap<UrbanElement, Integer> importanceMap = new HashMap<>();
+    private int[] importanceOfUrbanElements;
     /* */
     private final Architecture architecture;
     /* */
@@ -23,40 +13,18 @@ public class Terrain implements UrbanElement{
     private float state;
     private int age = 0;
 
-    public Terrain(Architecture architecture, float quality, CostContainer buildCost, CostContainer maintainingCost, UrbanElement[] urbanElements){
-        if(buildCost == null || maintainingCost == null){ throw new IllegalArgumentException("Neither cost nor building can be null");}
-        this.buildingCost = buildCost;
-        this.maintainingCost = maintainingCost;
-        this.architecture = architecture;
-        this.quality = quality;
-        this.state = 1.0f;
-
-        this.urbanElements = urbanElements;
-
-        if(urbanElements != null && urbanElements.length > 0){
-            initialCost = new CostContainer();
-            int x = architecture.getX();
-            int y = architecture.getY();
-
-            for(UrbanElement elem: urbanElements){
-                Architecture tmp = elem.getArchitecture();
-                if(tmp.getX() <= x && tmp.getY() <= y){
-                    x-=tmp.getX();
-                    y-=tmp.getY();
-
-                    //Build Building
-                    initialCost = initialCost.addCostContainer(
-                            buildCost.multiplyContainer(
-                                    tmp.getFootprint()
-                            )
-                    );
-                    state-= (float) tmp.getFootprint() /architecture.getFootprint();
-                }
-                else{throw new IllegalArgumentException("UrbanElement too big for Terrain");}
-            }
-        }
-    }
-
+    /**
+     * This class simulates a space on which UrbanElements like Buildings can be built
+     * Depending on the space (how does it look, is there nature, ...) the satisfaction of the people changes
+     * and due to trees f.ex. the Carbon-Footprint of a Building can be reduced.
+     *
+     * @param record Record with data
+     * @param urbanElements List of UrbanElements, which should be built on the terrain
+     *                      Depending on their position in the List, their position on the terrain
+     *                      is determined. The smaller the index of an element, the nearer it is to
+     *                      the terrain center. The UrbanElement on 1st-position is built exactly
+     *                      in the center
+     */
     public Terrain(Terrain.Record record, UrbanElement[] urbanElements){
         this.buildingCost = record.buildCost();
         this.maintainingCost = record.maintainingCost();
@@ -209,10 +177,18 @@ public class Terrain implements UrbanElement{
         return (int) footprint;
     }
 
+    /**
+     * Calculates the importance of every UrbanElement
+     * depending on:
+     * - their location
+     * - their "uniqueness" of architecture
+     */
     private void indexImportanceOfUrbanElements(){
         int average = calculateAverageArchitecturalImportance();
-        for(UrbanElement elem: urbanElements){
-            importanceMap.put(elem, elem.getArchitecture().compareVolume(average));
+        importanceOfUrbanElements = new int[urbanElements.length];
+        for(int i=0; i<urbanElements.length; i++){
+            float calculateLocationNum = (float) (0.2*(urbanElements.length - i));
+            importanceOfUrbanElements[i] = (int) (urbanElements[i].getArchitecture().compareVolume(average)*calculateLocationNum);
         }
     }
 
