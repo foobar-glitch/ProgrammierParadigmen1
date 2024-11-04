@@ -39,6 +39,17 @@ public class Apartment {
         this.satisfactionFactor = maxHappiness;
     }
 
+    public Apartment(Apartment.Record record){
+        this.age = 0;
+        this.lifetime = record.lifetimeApartment();
+        this.numberOfResidents = record.residentNumber();
+        this.constructionMaterial = record.material();
+        this.material = record.material();
+        this.costs = constructionMaterial.getTotalCost();
+        this.wasteMaterial = new MaterialBag();
+        this.satisfactionFactor = record.happinessUpperBound();
+    }
+
     public record Record(MaterialBag material, int residentNumber, int numberOfApartments, int lifetimeApartment,
                          double happinessUpperBound) {
 

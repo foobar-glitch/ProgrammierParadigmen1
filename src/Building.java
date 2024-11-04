@@ -28,10 +28,8 @@ public class Building implements UrbanElement{
         this.apartments = new Apartment[buildingBlueprint.apartmentBlueprint().numberOfApartments()];
         for (int i = 0; i < buildingBlueprint.apartmentBlueprint().numberOfApartments(); i++) {
             apartments[i] = new Apartment(
-                    buildingBlueprint.apartmentBlueprint().material(),
-                    buildingBlueprint.apartmentBlueprint().lifetimeApartment(),
-                    buildingBlueprint.apartmentBlueprint().residentNumber(),
-                    buildingBlueprint.apartmentBlueprint().happinessUpperBound());
+                    buildingBlueprint.apartmentBlueprint()
+            );
         }
         for (Apartment apartment : apartments) {
             this.numberOfResidents += apartment.getNumberOfResidents();
