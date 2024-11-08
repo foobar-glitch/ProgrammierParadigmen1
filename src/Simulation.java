@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 // contains state of the simulation and runs it
 // updates state with each time step accordingly
@@ -37,20 +42,79 @@ public class Simulation {
         return renovationRate;
     }
 
+    private CostContainer renovateApartments(Apartment[] apartmentList){
+        CostContainer costsThisYear = new CostContainer(0.0f, 0.0f, 0.0f);
+        happinessPerYear.add(terrain.satisfaction());
+
+        for (Apartment apartment : apartmentList){
+            if (Math.random() < 1.0 / apartment.getLifetime()){
+                costsThisYear.addCostContainer(apartment.renovate());
+                totalNumberOfRenovations++;
+            }
+        }
+        return costsThisYear;
+    }
+
+    private static Apartment[][] splitArray(Apartment[] original, int numParts) {
+        int length = original.length;
+        int partSize = length / numParts; // Base size of each part
+        int remainder = length % numParts; // Extra elements that will go into the first few parts
+
+        Apartment[][] subarrays = new Apartment[numParts][];
+
+        int startIndex = 0;
+
+        for (int i = 0; i < numParts; i++) {
+            // If there are extra elements, add one more to the current subarray
+            int currentPartSize = partSize + (i < remainder ? 1 : 0);
+
+            // Create the subarray and copy elements
+            subarrays[i] = new Apartment[currentPartSize];
+            System.arraycopy(original, startIndex, subarrays[i], 0, currentPartSize);
+
+            // Update the starting index for the next subarray
+            startIndex += currentPartSize;
+        }
+
+        return subarrays;
+    }
+
     // run the simulation with the parameters that have been specified in the objects initialization
     // nominal abstraction: behaviour of the simulation models what the assignment's text described
     public SimulationResult runSimulation(Catastrophe[] catastrophes) {
         while (building.checkAge()) {
-            CostContainer costsThisYear = new CostContainer(0.0f, 0.0f, 0.0f);
-            // Add the happiness including from terrain
-            happinessPerYear.add(terrain.satisfaction());
+            int numberThreads = 5;
+            Apartment[] apartments = building.getApartments();
+            int apartmentsPerThread = (int) Math.floor((double) apartments.length / numberThreads);
+            // distribute all apartments on the different threads
+            Apartment[][] apartmentsForAllThreads = splitArray(apartments, apartmentsPerThread);
+            ExecutorService executor = Executors.newFixedThreadPool(apartmentsForAllThreads.length);
 
-            for (Apartment apartment : building.getApartments()) {
-                if (Math.random() < 1.0 / apartment.getLifetime()) {
-                    costsThisYear.addCostContainer(apartment.renovate());
-                    totalNumberOfRenovations++;
-                }
+            // List to hold Future objects for each task
+            List<Future<CostContainer>> futures = new ArrayList<>();
+            for (Apartment[] apartmentsOfThread : apartmentsForAllThreads) {
+                Future<CostContainer> future = executor.submit(() -> renovateApartments(apartmentsOfThread)
+                );
+                futures.add(future);
             }
+
+            CostContainer costsThisYear = new CostContainer(0.0f, 0.0f, 0.0f);
+            for (Future<CostContainer> future : futures) {
+                // Get the result from each thread (this blocks until the task finishes)
+                try{
+                    costsThisYear.addCostContainer(future.get());
+                }catch (InterruptedException e) {
+                    // Handle the interruption (e.g., if the thread was interrupted while waiting for the result)
+                    System.err.println("Thread was interrupted: " + e.getMessage());
+                    Thread.currentThread().interrupt(); // Restore the interrupt status
+                } catch (ExecutionException e) {
+                    // Handle exceptions thrown by the task itself
+                    System.err.println("Task execution failed: " + e.getCause().getMessage());
+                }
+
+            }
+            executor.shutdown();
+
 
             double randomVal = Math.random();
             // Sort the array by probability in ascending order
