@@ -16,10 +16,11 @@ Hamed - Catastrophe (probabilities, example cases and calculations)
  */
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class Test {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         Database db = new Database();
         Building.Record[] testCases = db.readOutAllBuildingBlueprints();
 

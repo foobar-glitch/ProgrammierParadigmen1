@@ -78,7 +78,7 @@ public class Simulation {
 
     // run the simulation with the parameters that have been specified in the objects initialization
     // nominal abstraction: behaviour of the simulation models what the assignment's text described
-    public SimulationResult runSimulation(Catastrophe[] catastrophes) {
+    public SimulationResult runSimulation(Catastrophe[] catastrophes) throws ExecutionException, InterruptedException {
         while (building.checkAge()) {
             int numberThreads = 5;
             Apartment[] apartments = building.getApartments();
@@ -96,23 +96,12 @@ public class Simulation {
             }
 
             CostContainer costsThisYear = new CostContainer(0.0f, 0.0f, 0.0f);
-            try {
-                List<Future<CostContainer>> futures = executor.invokeAll(tasks);
-                for (Future<CostContainer> future : futures) {
-                    try {
-                        costsThisYear.addCostContainer(future.get());  // This will block until the result is available
-                    } catch (ExecutionException e) {
-                        // Handle the exception if the task execution failed
-                        System.err.println("Task execution failed: " + e.getCause().getMessage());
-                    } catch (InterruptedException e) {
-                        // Handle interruption (this may occur if the waiting thread is interrupted)
-                        System.err.println("Thread was interrupted: " + e.getMessage());
-                        Thread.currentThread().interrupt();  // Restore interrupt status
-                    }
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+
+            List<Future<CostContainer>> futures = executor.invokeAll(tasks);
+            for (Future<CostContainer> future : futures) {
+                costsThisYear.addCostContainer(future.get());  // This will block until the result is available
             }
+
 
             executor.shutdown();
 
