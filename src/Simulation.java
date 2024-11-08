@@ -2,10 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 // contains state of the simulation and runs it
 // updates state with each time step accordingly
@@ -91,30 +88,33 @@ public class Simulation {
             ExecutorService executor = Executors.newFixedThreadPool(apartmentsForAllThreads.length);
 
             // List to hold Future objects for each task
-            List<Future<CostContainer>> futures = new ArrayList<>();
+            List<Callable<CostContainer>> tasks = new ArrayList<>();
+
+            // Loop through each set of apartments for each thread and create Callable tasks
             for (Apartment[] apartmentsOfThread : apartmentsForAllThreads) {
-                Future<CostContainer> future = executor.submit(() -> renovateApartments(apartmentsOfThread)
-                );
-                futures.add(future);
+                tasks.add(() -> renovateApartments(apartmentsOfThread));
             }
 
             CostContainer costsThisYear = new CostContainer(0.0f, 0.0f, 0.0f);
-            for (Future<CostContainer> future : futures) {
-                // Get the result from each thread (this blocks until the task finishes)
-                try{
-                    costsThisYear.addCostContainer(future.get());
-                }catch (InterruptedException e) {
-                    // Handle the interruption (e.g., if the thread was interrupted while waiting for the result)
-                    System.err.println("Thread was interrupted: " + e.getMessage());
-                    Thread.currentThread().interrupt(); // Restore the interrupt status
-                } catch (ExecutionException e) {
-                    // Handle exceptions thrown by the task itself
-                    System.err.println("Task execution failed: " + e.getCause().getMessage());
+            try {
+                List<Future<CostContainer>> futures = executor.invokeAll(tasks);
+                for (Future<CostContainer> future : futures) {
+                    try {
+                        costsThisYear.addCostContainer(future.get());  // This will block until the result is available
+                    } catch (ExecutionException e) {
+                        // Handle the exception if the task execution failed
+                        System.err.println("Task execution failed: " + e.getCause().getMessage());
+                    } catch (InterruptedException e) {
+                        // Handle interruption (this may occur if the waiting thread is interrupted)
+                        System.err.println("Thread was interrupted: " + e.getMessage());
+                        Thread.currentThread().interrupt();  // Restore interrupt status
+                    }
                 }
-
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-            executor.shutdown();
 
+            executor.shutdown();
 
             double randomVal = Math.random();
             // Sort the array by probability in ascending order
