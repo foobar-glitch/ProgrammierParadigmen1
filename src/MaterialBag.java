@@ -2,7 +2,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.Buffer;
+import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * This class represents a collection of materials, where each material has a corresponding amount stored.
@@ -41,9 +47,9 @@ public class MaterialBag {
      */
     public MaterialBag(Material[] materials, Double[] amounts) {
         this.materialInventory = new HashMap<>();
-        for (int i = 0; i < materials.length; i++) {
-            materialInventory.put(materials[i], amounts[i]);
-        }
+        IntStream.range(0, materials.length).forEach(
+                i -> materialInventory.put(materials[i], amounts[i])
+        );
     }
 
     /**
@@ -54,32 +60,23 @@ public class MaterialBag {
      * BAD: Direct usage of `materialInventory.put(material, amount)` without abstraction increases the coupling between
      * MaterialBag and the `HashMap`. This results in a strong dependency between the `MaterialBag` object and the
      * specific data structure used.
-     *
-     * @param material The material whose amount is being set.
-     * @param amount The amount of the material in tons.
+     * @param material The material we are using (!=null)
+     * @param amount The amount of material we are defining in tons
      */
     public void setMaterial(Material material, double amount) {
         this.materialInventory.put(material, amount);
     }
 
-    /**
-     * Subtracts/Adds a specified amount from the current amount of a material in the inventory.
-     * Again, this follows the object-oriented principle of manipulating the internal state of the object.
-     * The operation of subtracting is done via a method that changes the state of the `materialInventory` directly.
-     *
-     * @param material The material from which the amount is to be subtracted.
-     * @param subtractAmount The amount to subtract in tons.
-     */
-    public void subtractMaterial(Material material, double subtractAmount) {
-        double newAmount = this.materialInventory.get(material) - subtractAmount;
-        this.materialInventory.put(material, newAmount);
-    }
 
     // GOOD: The `addMaterial()` method abstracts away the logic of adding material to the inventory,
     // ensuring low coupling.
+    /**
+     * Adds amount if addAmount > 0, subtracts amount if addAmount < 0
+     * @param material Material where amount shall be added/subtracted(!=null)
+     * @param addAmount Amount you want to add/subtract in Tons
+     */
     public void addMaterial(Material material, double addAmount) {
-        double newAmount = this.materialInventory.get(material) + addAmount;
-        this.materialInventory.put(material, newAmount);
+        this.materialInventory.merge(material, addAmount, Double::sum);
     }
 
     /**
@@ -97,13 +94,14 @@ public class MaterialBag {
      * @return A new MaterialBag with the quantities of all materials multiplied by the given factor.
      */
     public MaterialBag times(double multiplier){
-        MaterialBag tmp = new MaterialBag();
-        for(Material m : materialInventory.keySet()){
-            tmp.setMaterial(
-                    m,
-                    materialInventory.get(m)*multiplier
-            );
-        }
+        MaterialBag tmp = materialInventory.keySet().stream().collect(
+                MaterialBag::new,
+                (bag, material) -> bag.setMaterial(
+                        material,
+                        materialInventory.get(material)*multiplier
+                ),
+                (bag1, bag2) -> {}
+        );
         return tmp;
     }
 
@@ -113,12 +111,7 @@ public class MaterialBag {
      */
     public MaterialBag copy(){
         MaterialBag tmp = new MaterialBag();
-        for(Material m : materialInventory.keySet()){
-            tmp.setMaterial(
-                    m,
-                    materialInventory.get(m)
-            );
-        }
+        materialInventory.forEach(tmp::setMaterial);
         return tmp;
     }
 
@@ -128,16 +121,14 @@ public class MaterialBag {
      * which is a copy of the original inventory. The goal here is to avoid direct manipulation of
      * the original object’s state.
      *
-     * @return A new MaterialBag that is a copy of the original, with the same material quantities.
+     * @param bag MaterialBag which should be added (!= null)
+     * @return New MaterialBag made out of combining this and bag
      */
     public MaterialBag add(MaterialBag bag){
         MaterialBag tmp = copy();
-        for(Material m : bag.materialInventory.keySet()){
-            if(tmp.materialInventory.containsKey(m))
-                tmp.addMaterial(m, bag.materialInventory.get(m));
-            else
-                tmp.setMaterial(m, bag.materialInventory.get(m));
-        }
+        bag.materialInventory.forEach(
+                tmp::addMaterial
+        );
         return tmp;
     }
 
@@ -152,13 +143,14 @@ public class MaterialBag {
      * @return New MaterialBag containing all Waste-Materials
      */
     public MaterialBag getWaste(){
-        MaterialBag tmp = new MaterialBag();
-        for(Material m : materialInventory.keySet()){
-            tmp.setMaterial(
-                    m,
-                    materialInventory.get(m)*m.getCost().getWaste()
-            );
-        }
+        MaterialBag tmp = materialInventory.keySet().stream().collect(
+                MaterialBag::new,
+                (bag, material) -> bag.setMaterial(
+                        material,
+                        materialInventory.get(material)*material.getCost().getWaste()
+                ),
+                (bag1, bag2) -> {}
+        );
         return tmp;
     }
 
@@ -168,14 +160,13 @@ public class MaterialBag {
      * @return Number of Materials inside MaterialBag
      */
     public int size(){
-        int size = 0;
-        for(Material m: materialInventory.keySet()){
-            if(materialInventory.get(m) > 0) size++;
-        }
-        return size;
+        return (int) materialInventory.keySet().stream().filter(
+                material -> materialInventory.get(material) > 0
+        ).count();
     }
 
     /**
+     *
      * Calculates the total cost of all materials in the inventory, considering each material's cost,
      * CO2 emissions, and waste, scaled by their respective quantities.
      * This approach is a mix of object-oriented (CostContainer object to represent the total)
@@ -186,12 +177,10 @@ public class MaterialBag {
      * @return A CostContainer object representing the total cost of all materials in the inventory.
      */
     public CostContainer getTotalCost() {
-        CostContainer totalCost = new CostContainer(0f, 0f, 0f);
-        for (Material material : materialInventory.keySet()) {
-            CostContainer cost = material.getCost();
-            cost = cost.multiplyContainer(materialInventory.get(material));
-            totalCost = totalCost.addCostContainer(cost);
-        }
+        CostContainer totalCost = materialInventory.entrySet().stream()
+                .map(entry -> entry.getKey().getCost().multiplyContainer(entry.getValue()))
+                .reduce(new CostContainer(0f, 0f, 0f), CostContainer::addCostContainer);
+
         return totalCost;
     }
 
@@ -203,15 +192,13 @@ public class MaterialBag {
      * @return An array of Material objects contained in the MaterialBag.
      */
     public Material[] materials(){
-        Material[] materials = new Material[materialInventory.size()];
-        int i=0;
-        for(Material material : materialInventory.keySet()){
-            materials[i++] = material;
-        }
-        return materials;
+        return materialInventory.keySet().toArray(Material[]::new);
     }
 
     /**
+     * Read a MaterialBag from csv File
+     * @param path Path of File (!=null)
+     *
      *  Reads a MaterialBag from a CSV file. Each line in the CSV should contain the material's amount,
      *  name, cost, CO2 emissions, and waste.
      *  this is a procedural approach because it deals with reading data from an external source and
@@ -220,33 +207,50 @@ public class MaterialBag {
      *  BAD: The `readFromFile` method directly reads and processes data from a CSV file.
      *  This logic is tightly coupled with file I/O, which makes the class less flexible and harder to maintain.
      *  A better solution would be to move the file reading logic into a separate utility class, so that `MaterialBag`
-     *  can focus solely on managing materials.
+     *  can focus solely on managing materials. (Which is done by Database.java, so this method is depreciated)
      *
      *  @param path Path of File
      */
     public static MaterialBag readFromFile(String path){
-        MaterialBag materialBag = new MaterialBag();
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(path))){
-            for(String line; (line = bufferedReader.readLine()) != null; ) {
-                String[] values = line.split(", ");
-                if(values.length != 5){
-                    throw new UnsupportedEncodingException(path + " in wrong format: " + line);
-                }
 
-                double amount = Double.parseDouble(values[0]);
-                String materialName = values[1];
-                double materialCost = Double.parseDouble(values[2]);
-                double materialCo2 = Double.parseDouble(values[3]);
-                double materialWaste = Double.parseDouble(values[4]);
+        try (BufferedReader br = new BufferedReader(new FileReader(path))){
+            MaterialBag newBag = new MaterialBag();
 
-                CostContainer cost = new CostContainer(materialCost, materialCo2, materialWaste);
-                Material material = new Material(materialName, cost);
+            newBag.materialInventory = new HashMap<Material, Double>
+                    (
+                        br.lines().map(
+                            line -> {
+                                String[] values = line.split(", ");
+                                if(values.length != 5){throw new IllegalArgumentException();}
+                                double amount = Double.parseDouble(values[0]);
+                                String materialName = values[1];
+                                double materialCost = Double.parseDouble(values[2]);
+                                double materialCo2 = Double.parseDouble(values[3]);
+                                double materialWaste = Double.parseDouble(values[4]);
 
-                materialBag.setMaterial(material, amount);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("File: " + path + " does not exist");
+                                CostContainer cost = new CostContainer(materialCost, materialCo2, materialWaste);
+                                Material material = new Material(materialName, cost);
+
+                                return new AbstractMap.SimpleEntry<Material, Double>(material, amount);
+                            }
+                        )
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                    );
+
+            return newBag;
+
+        } catch(IOException e){
+            throw new RuntimeException("Help!");
         }
-        return materialBag;
+
+    }
+
+    @Override
+    public String toString(){
+        return materialInventory.keySet().stream().map(
+                material ->
+                        "[" + material.getName() + ", " + materialInventory.get(material) + "]")
+                .collect(Collectors.joining());
+
     }
 }
