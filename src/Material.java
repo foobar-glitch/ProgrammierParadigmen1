@@ -1,7 +1,6 @@
 /**
  * This class defines the material and its properties
  */
-// TODO could be a record?
 public class Material {
     /* Name of the Material*/
     private final String name;
