@@ -27,6 +27,7 @@ public class Apartment {
 
     /**
      * Apartment is immediately built automatically after creating the Object
+     * GOOD: Stores state of the construction. Useful for upcoming iterations and aging processes.
      */
     public Apartment(MaterialBag constructionMaterial, int lifetime, int numberOfResidents, double maxHappiness) {
         this.age = 0;
