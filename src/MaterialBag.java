@@ -12,7 +12,8 @@ import java.util.stream.IntStream;
 
 /**
  * This class represents a collection of materials, where each material has a corresponding amount stored.
- * The design uses both procedural and object-oriented approaches for different methods.
+ * The design uses both procedural, object-oriented and functional approaches for different methods.
+ * - Functional approach: f.ex. for repetitive tasks like copying every material in keySet or reading from File
  * - Procedural approach: For tasks like reading data from a file or performing calculations that are not tightly bound to the material objects.
  * - Object-oriented approach: For managing and manipulating the material inventory, where each material is treated as an object with its own properties and methods.
  */
@@ -165,15 +166,12 @@ public class MaterialBag {
         ).count();
     }
 
+    // Bad: Hard to read (for others) if something needs to be changed later
     /**
-     *
      * Calculates the total cost of all materials in the inventory, considering each material's cost,
      * CO2 emissions, and waste, scaled by their respective quantities.
      * This approach is a mix of object-oriented (CostContainer object to represent the total)
      * and procedural (iterating over the inventory and performing the calculations).
-     *
-     * GOOD: The `getTotalCost()` method uses dynamic binding to interact with the `Material` class's `getCost()`
-     * method.
      * @return A CostContainer object representing the total cost of all materials in the inventory.
      */
     public CostContainer getTotalCost() {
@@ -184,6 +182,7 @@ public class MaterialBag {
         return totalCost;
     }
 
+    // Good: Straightforward approach, very simple
     /**
      * Returns an array of all materials in the inventory.
      * This is a straightforward procedural approach, where we simply collect the materials
@@ -245,6 +244,7 @@ public class MaterialBag {
 
     }
 
+    // Good: Easy to read and understand, few lines of Code, straightforward
     @Override
     public String toString(){
         return materialInventory.keySet().stream().map(
