@@ -28,6 +28,10 @@ public class Apartment {
     /**
      * Apartment is immediately built automatically after creating the Object
      * GOOD: Stores state of the construction. Useful for upcoming iterations and aging processes.
+     * @param constructionMaterial (!=null)
+     * @param lifetime Lifetime of Building
+     * @param numberOfResidents Number of people living in the Building
+     * @param maxHappiness ([1.0,n]) maximal Happiness of inhabitants
      */
     public Apartment(MaterialBag constructionMaterial, int lifetime, int numberOfResidents, double maxHappiness) {
         this.age = 0;
@@ -40,6 +44,10 @@ public class Apartment {
         this.satisfactionFactor = maxHappiness;
     }
 
+    /**
+     * Creates an Apartment from a Apartment.Record Object
+     * @param record (!=null)
+     */
     public Apartment(Apartment.Record record){
         this.age = 0;
         this.lifetime = record.lifetimeApartment();
@@ -51,6 +59,14 @@ public class Apartment {
         this.satisfactionFactor = record.happinessUpperBound();
     }
 
+    /**
+     * Record of Apartment, which can be used to create an Apartment later on
+     * @param material (!=null)
+     * @param lifetimeApartment Lifetime of Building
+     * @param residentNumber Number of people living in the Building
+     * @param happinessUpperBound ([1.0,n]) maximal Happiness of inhabitants
+     * @param numberOfApartments (parameter can be ignored)
+     */
     public record Record(MaterialBag material, int residentNumber, int numberOfApartments, int lifetimeApartment,
                          double happinessUpperBound) {
 
@@ -129,7 +145,9 @@ public class Apartment {
     }
 
     /**
-     * Demolishes the Apartment and returns all costs
+     * Demolishes and Recycles Material of the Apartment and returns all costs
+     * => Demolished Apartment
+     * @param recycleRate ([0.0,1.0]) Rate of Apartments-Materials which can be recycled
      */
     public CostContainer demolish(double recycleRate) {
         // TODO: Change this line and add demolishing costs
