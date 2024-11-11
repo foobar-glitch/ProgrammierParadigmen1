@@ -13,6 +13,7 @@ Julian - UrbanElement Interface, Terrain, Architecture, (little changes in Main,
 Marian - simplified Test/Main and console outputs, created Database, small changes Simulation , BuildingBlueprints/BuildingMaterials/Catastrophes/Materials CSV-Files, "STYLE"-Comments
 Hamed - Catastrophe (probabilities, example cases and calculations)
 
+Aufgabe 3:
 Julian - Functional Implementations MaterialBag and Comments and Planning
 Marian - Planning, Organizing, Structuring
 Hamed, Parallizing Simulation, Apartments, Adding Comments
