@@ -27,11 +27,15 @@ public class MaterialBag {
     }
 
     /**
+     *
      * Constructor that initializes the material inventory with the specified materials and their corresponding amounts.
      * This approach provides a convenient way to instantiate a MaterialBag with predefined data.
      * It can be seen as a more procedural approach in the context of object initialization, where the logic of
      * adding materials to the inventory is handled within the constructor.
      *
+     * GOOD: The constructor that accepts arrays of materials and amounts is a good example of high cohesion.
+     * The constructor is focused on setting up the MaterialBag object without unnecessary complexity or external dependencies.
+     * This keeps the class clean and easy to maintain.
      * @param materials An array of materials to be added to the inventory.
      * @param amounts An array of amounts (in tons) corresponding to each material.
      */
@@ -46,6 +50,10 @@ public class MaterialBag {
      * Sets the amount for a specific material in the inventory.
      * This method is an example of an object-oriented approach, as we are encapsulating the material inventory
      * and providing a method to modify it directly via the MaterialBag object.
+     *
+     * BAD: Direct usage of `materialInventory.put(material, amount)` without abstraction increases the coupling between
+     * MaterialBag and the `HashMap`. This results in a strong dependency between the `MaterialBag` object and the
+     * specific data structure used.
      *
      * @param material The material whose amount is being set.
      * @param amount The amount of the material in tons.
@@ -67,7 +75,8 @@ public class MaterialBag {
         this.materialInventory.put(material, newAmount);
     }
 
-
+    // GOOD: The `addMaterial()` method abstracts away the logic of adding material to the inventory,
+    // ensuring low coupling.
     public void addMaterial(Material material, double addAmount) {
         double newAmount = this.materialInventory.get(material) + addAmount;
         this.materialInventory.put(material, newAmount);
@@ -79,6 +88,10 @@ public class MaterialBag {
      * (applying a multiplier to each material's amount).
      * The approach here focuses on returning a modified version of the original object, thus adhering to
      * the object-oriented principle of immutability.
+     *
+     * GOOD: The `times` method creates a new instance of MaterialBag and performs a deep copy of the material
+     * inventory.
+     * This ensures that the original object is not altered when performing operations on the new object.
      *
      * @param multiplier The factor by which the amount of each material is multiplied.
      * @return A new MaterialBag with the quantities of all materials multiplied by the given factor.
@@ -132,6 +145,10 @@ public class MaterialBag {
     /**
      * Object-Oriented because it returns a new MaterialBag containing a subset of the original data,
      * but the calculation itself is more procedural.
+     *
+     * BAD: The `getWaste()` method directly accesses the `Cost` data of the `Material` object and uses the
+     * `getWaste()` method of the `Cost` object. This leads to a strong coupling between `MaterialBag` and the
+     * `Material` class, as well as its `Cost` objects.
      * @return New MaterialBag containing all Waste-Materials
      */
     public MaterialBag getWaste(){
@@ -164,6 +181,8 @@ public class MaterialBag {
      * This approach is a mix of object-oriented (CostContainer object to represent the total)
      * and procedural (iterating over the inventory and performing the calculations).
      *
+     * GOOD: The `getTotalCost()` method uses dynamic binding to interact with the `Material` class's `getCost()`
+     * method.
      * @return A CostContainer object representing the total cost of all materials in the inventory.
      */
     public CostContainer getTotalCost() {
@@ -197,6 +216,12 @@ public class MaterialBag {
      *  name, cost, CO2 emissions, and waste.
      *  this is a procedural approach because it deals with reading data from an external source and
      *  parsing it into an object.
+     *
+     *  BAD: The `readFromFile` method directly reads and processes data from a CSV file.
+     *  This logic is tightly coupled with file I/O, which makes the class less flexible and harder to maintain.
+     *  A better solution would be to move the file reading logic into a separate utility class, so that `MaterialBag`
+     *  can focus solely on managing materials.
+     *
      *  @param path Path of File
      */
     public static MaterialBag readFromFile(String path){
