@@ -20,7 +20,7 @@ public class Catastrophe {
      * This constructor demonstrates object-oriented encapsulation by validating input values
      * and initializing all attributes in a single step, thereby ensuring data integrity.
      *
-     * @param eventName   the name of the catastrophic event
+     * @param eventName   (!=null) the name of the catastrophic event
      * @param damage      the amount of damage caused by the event as a percentage [0, 1]
      * @param probability the probability of the event occurring as a value [0, 1]
      * @throws IllegalArgumentException if damage or probability is outside the [0, 1] range
