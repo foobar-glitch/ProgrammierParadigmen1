@@ -43,8 +43,10 @@ public class MaterialBag {
      * GOOD: The constructor that accepts arrays of materials and amounts is a good example of high cohesion.
      * The constructor is focused on setting up the MaterialBag object without unnecessary complexity or external dependencies.
      * This keeps the class clean and easy to maintain.
-     * @param materials An array of materials to be added to the inventory.
-     * @param amounts An array of amounts (in tons) corresponding to each material.
+     *
+     * materials.length == amounts.length
+     * @param materials (!=null) An array of materials to be added to the inventory.
+     * @param amounts  (!=mull) An array of amounts (in tons) corresponding to each material.
      */
     public MaterialBag(Material[] materials, Double[] amounts) {
         this.materialInventory = new HashMap<>();
@@ -196,7 +198,6 @@ public class MaterialBag {
 
     /**
      * Read a MaterialBag from csv File
-     * @param path Path of File (!=null)
      *
      *  Reads a MaterialBag from a CSV file. Each line in the CSV should contain the material's amount,
      *  name, cost, CO2 emissions, and waste.
@@ -208,7 +209,7 @@ public class MaterialBag {
      *  A better solution would be to move the file reading logic into a separate utility class, so that `MaterialBag`
      *  can focus solely on managing materials. (Which is done by Database.java, so this method is depreciated)
      *
-     *  @param path Path of File
+     *  @param path Path of File (!=null)
      */
     public static MaterialBag readFromFile(String path){
 
@@ -239,7 +240,7 @@ public class MaterialBag {
             return newBag;
 
         } catch(IOException e){
-            throw new RuntimeException("Help!");
+            throw new RuntimeException("Either File not found or file in wrong format!");
         }
 
     }
