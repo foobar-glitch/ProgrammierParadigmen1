@@ -14,6 +14,8 @@ Marian - simplified Test/Main and console outputs, created Database, small chang
 Hamed - Catastrophe (probabilities, example cases and calculations)
 
 Julian - Functional Implementations MaterialBag and Comments and Planning
+Marian - Planning, Organizing, Structuring
+Hamed, Parallizing Simulation, Apartments, Adding Comments
 
  */
 
