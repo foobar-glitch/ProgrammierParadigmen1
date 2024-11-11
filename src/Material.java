@@ -9,8 +9,8 @@ public class Material {
     private final CostContainer acquisitionCost;
 
     /**
-     *
-     * @param acquisitionCost cost of the acquisition of the material
+     * @param name (!=null) Name of Material
+     * @param acquisitionCost (!=null) cost of the acquisition of the material
      */
     public Material(String name, CostContainer acquisitionCost) {
         this.name = name;
