@@ -26,12 +26,21 @@ public class Apartment {
     }
 
     /**
-     * Apartment is immediately built automatically after creating the Object
-     * GOOD: Stores state of the construction. Useful for upcoming iterations and aging processes.
-     * @param constructionMaterial (!=null)
-     * @param lifetime Lifetime of Building
-     * @param numberOfResidents Number of people living in the Building
-     * @param maxHappiness ([1.0,n]) maximal Happiness of inhabitants
+     * Apartment is immediately built automatically after creating the object.
+     *
+     * GOOD: Stores the state of the construction. Useful for upcoming iterations
+     * and aging processes.
+     *
+     * Preconditions:
+     * - constructionMaterial != null
+     * - lifetime > 0
+     * - numberOfResidents >= 0
+     * - maxHappiness is a double in the range [1.0, MAX_DOUBLE]
+     *
+     * @param constructionMaterial Material used for construction (must not be null).
+     * @param lifetime Lifetime of the building (must be > 0).
+     * @param numberOfResidents Number of residents (must be >= 0).
+     * @param maxHappiness Maximum happiness of inhabitants (must be in [1.0, MAX_DOUBLE]).
      */
     public Apartment(MaterialBag constructionMaterial, int lifetime, int numberOfResidents, double maxHappiness) {
         this.age = 0;
@@ -45,8 +54,8 @@ public class Apartment {
     }
 
     /**
-     * Creates an Apartment from a Apartment.Record Object
-     * @param record (!=null)
+     * Creates an Apartment from an Apartment.Record Object
+     * @param record must not be null
      */
     public Apartment(Apartment.Record record){
         this.age = 0;
@@ -61,9 +70,17 @@ public class Apartment {
 
     /**
      * Record of Apartment, which can be used to create an Apartment later on
-     * @param material (!=null)
-     * @param lifetimeApartment Lifetime of Building
-     * @param residentNumber Number of people living in the Building
+     *
+     * Preconditions:
+     * - material != null
+     * - lifetimeApartment > 0
+     * - residentNumber >= 0
+     * - happinessUpperBound is a double in the range [1.0, MAX_DOUBLE]
+     * - numberOfApartments any number (parameter can be "ignored")
+     *
+     * @param material !=null
+     * @param lifetimeApartment > 0, Lifetime of Building
+     * @param residentNumber >= 0, Number of people living in the Building
      * @param happinessUpperBound ([1.0,n]) maximal Happiness of inhabitants
      * @param numberOfApartments (parameter can be ignored)
      */
@@ -73,7 +90,12 @@ public class Apartment {
     }
 
     /**
+     * Preconditions:
+     * - current lifetime of Apartment < lifetime of Apartment
+     *
      * Increments the Age (+1 year)
+     * Calculates the cost created by the Building in one year and
+     * adds it to temporary waste which can be retrieved by update()-method
      *
      * @return FALSE if the Apartment exceeded its lifetime
      */
