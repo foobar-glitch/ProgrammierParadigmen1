@@ -116,9 +116,9 @@ public class Apartment {
     }
 
     /**
-     * Calculates the yearly costs of the Apartment
+     * Calculates the yearly costs of the Apartment stored in tmp
      *
-     * @return Cost of this Year
+     * @return Cost of this tmp (Year)
      */
     public CostContainer currentCost() {
         CostContainer costs = wasteMaterial.getTotalCost();
@@ -128,6 +128,7 @@ public class Apartment {
 
     /**
      * Renovates the Apartment completely
+     * @return cost of renovation
      */
     public CostContainer renovate() {
         MaterialBag tmp = constructionMaterial.copy();
@@ -167,6 +168,10 @@ public class Apartment {
     }
 
     /**
+     *
+     * Preconditions
+     * - recycleRate must be double in range 0.0 to 1.0
+     *
      * Demolishes and Recycles Material of the Apartment and returns all costs
      * => Demolished Apartment
      * @param recycleRate ([0.0,1.0]) Rate of Apartments-Materials which can be recycled
