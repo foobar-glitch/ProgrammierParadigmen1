@@ -14,6 +14,12 @@
  *
  * nominal abstraction because it creates a named entity (Catastrophe) that encapsulates data and behavior,
  * abstracting away internal implementation details.
+ *
+ * Zusicherung:
+ * It is checked in the constructor that the damage is between 1 and 0 and that the probability is between these
+ * values as well.
+ * The probability is a statistical value therefore it has to be between 0 and 1
+ * The damage is a scaling factor which reduces the lifetime of the building and therefore also between 0 and 1
  */
 public class Catastrophe {
     String eventName;
