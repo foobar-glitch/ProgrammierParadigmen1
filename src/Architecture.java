@@ -9,10 +9,6 @@
  * which hide implementation details and expose clear, reusable behavior
  *
  *
- * Methods like getFootprint() and getVolume() abstract calculations (footprint and volume) while hiding their
- * implementation. Comparison methods like compareFootprint() and compareVolume() allow users to compare objects
- * without manually calculating or accessing individual attributes.
- *
  * Behavioral Abstraction:
  * The class abstracts behaviors related to the dimensions of a structure:
  *
