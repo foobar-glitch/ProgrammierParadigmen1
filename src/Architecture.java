@@ -16,6 +16,10 @@
  * getVolume() abstracts the calculation of the 3D volume (width × length × height).
  * Comparison methods (e.g., compareFootprint(), compareVolume()) abstract decision-making logic for
  * determining relative sizes.
+ *
+ * Zusicherung:
+ * The dimenstions of the architecture are checked. If the architecture does not follow a 3-dimensional
+ * pattern it raises an error
  * */
 public class Architecture {
 
