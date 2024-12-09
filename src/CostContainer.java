@@ -2,6 +2,21 @@
  * This class represents a container for storing various costs associated with
  * materials, including financial costs, CO2 usage, and waste generation.
  * It provides methods for adding, subtracting, and scaling costs.
+ *
+ * Procedural Abstraction
+ * Methods like multiplyContainer(double amount) represent procedural abstraction by breaking down operations
+ * into steps (e.g., multiplying each attribute by a scalar).
+ * Users do not see the internal sequence of multiplications—they only interact with a clean method that returns
+ * a new CostContainer object with scaled values.
+ *
+ * nominal abstraction:
+ * because it abstracts the concept of a material's "costs" and represents it with a clear named entity.
+ *
+ * functional abstraction:
+ * Scaling the cost to one ton for efficiency is as we focus on what the operations do rather than how they are
+ * implemented.
+ *
+ * Data Abstraction: The private fields (cost, co2, waste) hide the internal representation of the data.
  */
 public class CostContainer {
     /**

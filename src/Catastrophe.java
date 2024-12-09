@@ -1,14 +1,19 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-
 /**
  * The Catastrophe class represents a catastrophic event characterized by its name,
  * the potential damage it may cause, and the probability of its occurrence.
  * This class uses object-oriented principles to encapsulate event data and ensure
  * that values are validated upon creation.
+ *
+ * Abstraction properties:
+ *
+ * The class abstracts the details of a catastrophic event by encapsulating key attributes
+ * (event name, damage, and probability) and providing a simplified interface for interacting with this data.
+ *
+ * The internal representation (data validation and fields) is hidden, while the user interacts only through
+ * the constructor and getter methods.
+ *
+ * nominal abstraction because it creates a named entity (Catastrophe) that encapsulates data and behavior,
+ * abstracting away internal implementation details.
  */
 public class Catastrophe {
     String eventName;

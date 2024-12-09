@@ -1,3 +1,26 @@
+/**
+ *
+ * The class abstracts the details of an architectural structure by encapsulating the key attribute
+ * dimensions (represented as int[] dimensions) and providing controlled access through methods like getX(), getY(),
+ * and getZ()
+ *
+ * It implements nominal abstraction because it provides a named abstraction (Architecture) for a building's dimensions
+ * and operations. It also includes functional abstraction through methods like getVolume() and compareFootprint(),
+ * which hide implementation details and expose clear, reusable behavior
+ *
+ *
+ * Methods like getFootprint() and getVolume() abstract calculations (footprint and volume) while hiding their
+ * implementation. Comparison methods like compareFootprint() and compareVolume() allow users to compare objects
+ * without manually calculating or accessing individual attributes.
+ *
+ * Behavioral Abstraction:
+ * The class abstracts behaviors related to the dimensions of a structure:
+ *
+ * getFootprint() abstracts the calculation of the 2D footprint (width × length).
+ * getVolume() abstracts the calculation of the 3D volume (width × length × height).
+ * Comparison methods (e.g., compareFootprint(), compareVolume()) abstract decision-making logic for
+ * determining relative sizes.
+ * */
 public class Architecture {
 
     private final int[] dimensions;

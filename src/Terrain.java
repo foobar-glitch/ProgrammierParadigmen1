@@ -1,5 +1,18 @@
 // Object oriented Class, nominative Style
-
+/**
+ * Nominal abstraction:
+ *The Terrain class itself represents a space or plot of land on which urban elements (like buildings) can be constructed.
+ * The class is named Terrain to abstract the real-world concept of a piece of land,
+ * which can hold multiple urban elements and can undergo various operations like construction, demolition, and aging.
+ *
+ * Data abstraction:
+ * The fields in the Terrain class (such as buildingCost, maintainingCost, initialCost,
+ * urbanElements, architecture, quality, state, etc.) represent the internal state of the
+ * terrain, but these are all encapsulated.
+ * The class hides the actual data behind methods, allowing external code to interact with the Terrain object through
+ * the public methods without directly accessing the private fields.
+ *
+ */
 public class Terrain implements UrbanElement{
 
     /* Cost of Building on terrain per m^2 */
