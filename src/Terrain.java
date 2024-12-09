@@ -1,3 +1,5 @@
+// Object oriented Class, nominative Style
+
 public class Terrain implements UrbanElement{
 
     /* Cost of Building on terrain per m^2 */
@@ -18,8 +20,8 @@ public class Terrain implements UrbanElement{
      * Depending on the space (how does it look, is there nature, ...) the satisfaction of the people changes
      * and due to trees f.ex. the Carbon-Footprint of a Building can be reduced.
      *
-     * @param record Record with data
-     * @param urbanElements List of UrbanElements, which should be built on the terrain
+     * @param record (!=null) Record with data
+     * @param urbanElements (!=null) List of UrbanElements, which should be built on the terrain
      *                      Depending on their position in the List, their position on the terrain
      *                      is determined. The smaller the index of an element, the nearer it is to
      *                      the terrain center. The UrbanElement on 1st-position is built exactly
@@ -128,7 +130,7 @@ public class Terrain implements UrbanElement{
 
     /**
      * Demolishes UrbanElement elem if inside This
-     * @param elem UrbanElement which should be demolished
+     * @param elem (!=null) UrbanElement which should be demolished
      * @return Costs of demolishing the UrbanElement
      */
     public CostContainer demolish(UrbanElement elem){

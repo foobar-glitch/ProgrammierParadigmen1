@@ -12,7 +12,8 @@ import java.util.stream.IntStream;
 
 /**
  * This class represents a collection of materials, where each material has a corresponding amount stored.
- * The design uses both procedural and object-oriented approaches for different methods.
+ * The design uses both procedural, object-oriented and functional approaches for different methods.
+ * - Functional approach: f.ex. for repetitive tasks like copying every material in keySet or reading from File
  * - Procedural approach: For tasks like reading data from a file or performing calculations that are not tightly bound to the material objects.
  * - Object-oriented approach: For managing and manipulating the material inventory, where each material is treated as an object with its own properties and methods.
  */
@@ -42,8 +43,10 @@ public class MaterialBag {
      * GOOD: The constructor that accepts arrays of materials and amounts is a good example of high cohesion.
      * The constructor is focused on setting up the MaterialBag object without unnecessary complexity or external dependencies.
      * This keeps the class clean and easy to maintain.
-     * @param materials An array of materials to be added to the inventory.
-     * @param amounts An array of amounts (in tons) corresponding to each material.
+     *
+     * materials.length == amounts.length
+     * @param materials (!=null) An array of materials to be added to the inventory.
+     * @param amounts  (!=mull) An array of amounts (in tons) corresponding to each material.
      */
     public MaterialBag(Material[] materials, Double[] amounts) {
         this.materialInventory = new HashMap<>();
@@ -165,15 +168,12 @@ public class MaterialBag {
         ).count();
     }
 
+    // Bad: Hard to read (for others) if something needs to be changed later
     /**
-     *
      * Calculates the total cost of all materials in the inventory, considering each material's cost,
      * CO2 emissions, and waste, scaled by their respective quantities.
      * This approach is a mix of object-oriented (CostContainer object to represent the total)
      * and procedural (iterating over the inventory and performing the calculations).
-     *
-     * GOOD: The `getTotalCost()` method uses dynamic binding to interact with the `Material` class's `getCost()`
-     * method.
      * @return A CostContainer object representing the total cost of all materials in the inventory.
      */
     public CostContainer getTotalCost() {
@@ -184,6 +184,7 @@ public class MaterialBag {
         return totalCost;
     }
 
+    // Good: Straightforward approach, very simple
     /**
      * Returns an array of all materials in the inventory.
      * This is a straightforward procedural approach, where we simply collect the materials
@@ -197,7 +198,6 @@ public class MaterialBag {
 
     /**
      * Read a MaterialBag from csv File
-     * @param path Path of File (!=null)
      *
      *  Reads a MaterialBag from a CSV file. Each line in the CSV should contain the material's amount,
      *  name, cost, CO2 emissions, and waste.
@@ -209,7 +209,7 @@ public class MaterialBag {
      *  A better solution would be to move the file reading logic into a separate utility class, so that `MaterialBag`
      *  can focus solely on managing materials. (Which is done by Database.java, so this method is depreciated)
      *
-     *  @param path Path of File
+     *  @param path Path of File (!=null)
      */
     public static MaterialBag readFromFile(String path){
 
@@ -240,11 +240,12 @@ public class MaterialBag {
             return newBag;
 
         } catch(IOException e){
-            throw new RuntimeException("Help!");
+            throw new RuntimeException("Either File not found or file in wrong format!");
         }
 
     }
 
+    // Good: Easy to read and understand, few lines of Code, straightforward
     @Override
     public String toString(){
         return materialInventory.keySet().stream().map(

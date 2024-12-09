@@ -1,6 +1,8 @@
 /**
  * This Interface is for every part of an urban space
  * It includes Artifacts, Buildings, Terrains, possibly Cities and Countries
+ *
+ * Object Oriented approach, Replaceablity (Ersetzbarkeit) of different classes implementing UrbanElements
  */
 public interface UrbanElement {
 

@@ -19,6 +19,10 @@ public class Building implements UrbanElement{
     /* Architecture of Building (e.g. Footprint, ...) */
     private final Architecture architecture;
 
+    /**
+     * Create Building from Record
+     * @param buildingBlueprint (!=null)
+     */
     public Building(Building.Record buildingBlueprint) {
         this.age = 0;
         this.lifetime = buildingBlueprint.lifetime();

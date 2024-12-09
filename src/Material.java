@@ -1,7 +1,6 @@
 /**
  * This class defines the material and its properties
  */
-// TODO could be a record?
 public class Material {
     /* Name of the Material*/
     private final String name;
@@ -9,8 +8,8 @@ public class Material {
     private final CostContainer acquisitionCost;
 
     /**
-     *
-     * @param acquisitionCost cost of the acquisition of the material
+     * @param name (!=null) Name of Material
+     * @param acquisitionCost (!=null) cost of the acquisition of the material
      */
     public Material(String name, CostContainer acquisitionCost) {
         this.name = name;

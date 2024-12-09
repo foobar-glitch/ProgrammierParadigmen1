@@ -4,7 +4,7 @@ public class Architecture {
 
     /**
      * This class contains Architecture in form of width, length and height
-     * @param dimensions int[3]{x,y,z} or {width, length, height}
+     * @param dimensions (!=null) int[3]{x,y,z} or {width, length, height}
      */
     public Architecture(int[] dimensions){
         // validate data
@@ -45,7 +45,7 @@ public class Architecture {
     }
 
     /**
-     * @param architecture Object to compare with this
+     * @param architecture (!=null) Object to compare with this
      * @return >= 0 if this is bigger, 0 if it's the same, <0 if it's smaller
      */
     int compareVolume(Architecture architecture){
